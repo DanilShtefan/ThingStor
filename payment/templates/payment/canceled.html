@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Оплата отменена | Вязаный Дом{% endblock %}
+
+{% block content %}
+<div class="text-center pt-5">
+  <h1 class="section-title mb-3">Оплата не прошла</h1>
+  <p class="text-muted mb-4">Что-то пошло не так. Вы можете попробовать снова.</p>
+  <a href="{% url 'checkout:order_list' %}" class="btn-dark-solid">Мои заказы</a>
+</div>
+{% endblock %}

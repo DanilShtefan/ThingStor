@@ -1,15 +1,19 @@
 {% extends "base.html" %}
 {% load static %}
-{% load cache %}
 
 {% block title %}Контакты | Вязаный Дом{% endblock %}
 
 {% block content %}
-{% cache 86400 pages_contacts %}
 <div class="text-center mb-5 pt-4">
   <p class="section-label mb-3">Связаться с нами</p>
   <h1 class="section-title">Контакты</h1>
 </div>
+
+{% if messages %}
+  {% for msg in messages %}
+    <p style="font-size: 13px; color: var(--rust); text-align: center; margin-bottom: 16px;">{{ msg }}</p>
+  {% endfor %}
+{% endif %}
 
 <div class="row g-5" style="max-width: 1200px; margin: 0 auto;">
   <div class="col-lg-6">
@@ -48,32 +52,26 @@
 
   <div class="col-lg-6">
     <h2 class="serif fs-2 mb-4">Написать нам</h2>
-    <form class="d-flex flex-column gap-4">
+    <form method="post" class="d-flex flex-column gap-4">
+      {% csrf_token %}
       <div>
-        <label for="name" class="form-label-sm">Имя</label>
-        <input type="text" id="name" class="form-control-clean" placeholder="Ваше имя">
+        <label for="{{ form.name.id_for_label }}" class="form-label-sm">Имя</label>
+        {{ form.name }}
       </div>
       <div>
-        <label for="email" class="form-label-sm">Email</label>
-        <input type="email" id="email" class="form-control-clean" placeholder="email@example.com">
+        <label for="{{ form.email.id_for_label }}" class="form-label-sm">Email</label>
+        {{ form.email }}
       </div>
       <div>
-        <label for="subject" class="form-label-sm">Тема</label>
-        <select id="subject" class="form-control-clean">
-          <option value="">Выберите тему</option>
-          <option value="order">Вопрос о заказе</option>
-          <option value="product">Вопрос о товаре</option>
-          <option value="collaboration">Сотрудничество</option>
-          <option value="other">Другое</option>
-        </select>
+        <label for="{{ form.subject.id_for_label }}" class="form-label-sm">Тема</label>
+        {{ form.subject }}
       </div>
       <div>
-        <label for="message" class="form-label-sm">Сообщение</label>
-        <textarea id="message" rows="5" class="form-control-clean" placeholder="Ваше сообщение..."></textarea>
+        <label for="{{ form.message.id_for_label }}" class="form-label-sm">Сообщение</label>
+        {{ form.message }}
       </div>
       <button type="submit" class="btn-dark-solid w-100">Отправить</button>
     </form>
   </div>
 </div>
-{% endcache %}
 {% endblock %}

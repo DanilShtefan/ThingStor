@@ -33,6 +33,22 @@
 
     <h2 class="serif fs-4 mb-3 mt-4">Статус</h2>
     <span style="font-size: 12px; text-transform: uppercase; letter-spacing: 0.15em; color: var(--rust);">{{ order.get_status_display }}</span>
+    {% if order.paid %}
+      <p style="font-size: 12px; color: green; margin-top: 4px;">✓ Оплачен</p>
+    {% else %}
+      <p style="font-size: 12px; color: var(--rust); margin-top: 4px;">Ожидает оплаты</p>
+      <form action="{% url 'checkout:order_pay' order.id %}" method="post" class="mt-3">
+        {% csrf_token %}
+        <button type="submit" class="btn-dark-solid w-100">Оплатить {{ order.total_price }} €</button>
+      </form>
+    {% endif %}
+
+    {% if order.status == 'pending' and order.paid %}
+      <form action="{% url 'checkout:order_cancel' order.id %}" method="post" class="mt-3">
+        {% csrf_token %}
+        <button type="submit" class="outline-btn w-100" style="border-color: rgba(139, 79, 60, 0.4); color: #8B4F3C;">Отменить заказ</button>
+      </form>
+    {% endif %}
 
     <div class="mt-4">
       <a href="{% url 'checkout:order_list' %}" class="outline-btn d-inline-block">Все заказы</a>

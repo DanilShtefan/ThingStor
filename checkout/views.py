@@ -1,13 +1,20 @@
 import json
+from decimal import Decimal
+import stripe
+from django.conf import settings
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.http import JsonResponse
-from django.views.decorators.http import require_GET
+from django.views.decorators.http import require_GET, require_POST
 from .models import DeliveryAddress, Order, OrderItem
 from .forms import AddressForm, CdekAddressForm
 from .cdek_api import CdekApi
 from cart.cart import Cart
+from coupons.models import Coupon
+from coupons.coupon_session import CouponSession
+
+stripe.api_key = settings.STRIPE_SECRET_KEY
 
 
 @login_required
@@ -115,6 +122,19 @@ def checkout(request):
     addresses = DeliveryAddress.objects.filter(user=request.user)
     default_addr = addresses.filter(is_default=True).first()
 
+    coupon = None
+    discount = 0
+    total_raw = Decimal(cart.get_total_price())
+    cs = CouponSession(request)
+    if cs.code:
+        try:
+            coupon = Coupon.objects.get(code=cs.code)
+            if coupon.is_valid():
+                discounted = coupon.apply_discount(total_raw)
+                discount = total_raw - discounted
+        except Coupon.DoesNotExist:
+            pass
+
     if request.method == 'POST':
         address_id = request.POST.get('address_id')
         if not address_id:
@@ -122,13 +142,15 @@ def checkout(request):
             return redirect('checkout:checkout')
 
         addr = get_object_or_404(DeliveryAddress, id=address_id, user=request.user)
-        total = cart.get_total_price()
+        total = total_raw - discount
 
         order = Order.objects.create(
             user=request.user,
             delivery_address=addr,
             delivery_address_snapshot=str(addr),
             total_price=total,
+            coupon_code=coupon.code if coupon else '',
+            discount_amount=discount,
         )
 
         for item in cart:
@@ -140,14 +162,23 @@ def checkout(request):
                 quantity=item['quantity'],
             )
 
+        if coupon and discount:
+            coupon.used_count += 1
+            coupon.save(update_fields=['used_count'])
+            cs.remove()
+
         cart.clear()
-        messages.success(request, f'Заказ #{order.id} оформлен!')
-        return redirect('checkout:order_detail', order_id=order.id)
+        request.session['order_id'] = order.id
+        return redirect('payment:process')
 
     return render(request, 'checkout/checkout.html', {
         'cart': cart,
         'addresses': addresses,
         'default_addr': default_addr,
+        'coupon': coupon,
+        'discount': discount,
+        'total_raw': total_raw,
+        'total_discounted': total_raw - discount,
     })
 
 
@@ -161,3 +192,32 @@ def order_list(request):
 def order_detail(request, order_id):
     order = get_object_or_404(Order, id=order_id, user=request.user)
     return render(request, 'checkout/order_detail.html', {'order': order})
+
+
+@require_POST
+@login_required
+def order_pay(request, order_id):
+    order = get_object_or_404(Order, id=order_id, user=request.user)
+    request.session['order_id'] = order.id
+    return redirect('payment:process')
+
+
+@require_POST
+@login_required
+def order_cancel(request, order_id):
+    order = get_object_or_404(Order, id=order_id, user=request.user)
+    if order.status != 'pending' or not order.paid:
+        messages.error(request, 'Отменить можно только оплаченные заказы в статусе "Ожидает обработки"')
+        return redirect('checkout:order_detail', order_id=order.id)
+
+    if order.stripe_id:
+        try:
+            stripe.Refund.create(payment_intent=order.stripe_id)
+        except Exception:
+            messages.error(request, 'Ошибка при возврате платежа')
+            return redirect('checkout:order_detail', order_id=order.id)
+
+    order.status = 'cancelled'
+    order.save(update_fields=['status'])
+    messages.success(request, f'Заказ #{order.id} отменён')
+    return redirect('checkout:order_detail', order_id=order.id)

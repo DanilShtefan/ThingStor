@@ -4,7 +4,12 @@
 {% block title %}Корзина{% endblock %}
 
 {% block content %}
-{% comment %} <h1 class="section-title mb-4">Корзина</h1> {% endcomment %}
+
+{% if messages %}
+  {% for msg in messages %}
+    <p style="font-size: 13px; color: var(--rust); text-align: center; margin-bottom: 16px;">{{ msg }}</p>
+  {% endfor %}
+{% endif %}
 
 {% if cart|length %}
 <div class="table-responsive">
@@ -60,8 +65,44 @@
     </table>
 </div>
 
-<div class="text-end">
-    <p class="cart-total">Итого: <strong>{{ cart.get_total_price }} €</strong></p>
+<div class="row justify-content-end mt-4">
+  <div class="col-md-5">
+    {% if coupon %}
+      <div class="d-flex align-items-center justify-content-between p-3 mb-3" style="background: var(--warm-beige);">
+        <div>
+          <p class="fw-medium mb-0" style="font-size: 13px;">Промокод: <strong>{{ coupon.code }}</strong></p>
+          <p class="text-muted mb-0" style="font-size: 12px;">
+            {% if coupon.discount_type == 'percentage' %}{{ coupon.discount_value }}% скидка{% if coupon.max_discount_amount %} (макс. {{ coupon.max_discount_amount }} €){% endif %}{% else %}{{ coupon.discount_value }} € скидка{% endif %}
+          </p>
+        </div>
+        <form action="{% url 'coupons:remove_coupon' %}" method="post" class="m-0">
+          {% csrf_token %}
+          <button type="submit" class="outline-btn" style="padding: 6px 12px; font-size: 10px; border-color: rgba(139, 79, 60, 0.4); color: #8B4F3C;">Удалить</button>
+        </form>
+      </div>
+    {% else %}
+      <form action="{% url 'coupons:apply_coupon' %}" method="post" class="d-flex gap-2 mb-3">
+        {% csrf_token %}
+        <div class="flex-grow-1">
+          <input type="text" name="code" class="form-control-clean w-100" placeholder="Промокод" style="font-size: 13px;">
+          {% if coupon_error %}
+            <p style="font-size: 11px; color: var(--rust); margin-top: 4px; margin-bottom: 0;">{{ coupon_error }}</p>
+          {% endif %}
+        </div>
+        <button type="submit" class="outline-btn" style="padding: 8px 16px; font-size: 10px; white-space: nowrap;">Применить</button>
+      </form>
+    {% endif %}
+
+    <div class="text-end">
+      {% if coupon and discount %}
+        <p class="text-muted mb-0" style="font-size: 13px; text-decoration: line-through;">{{ total_raw|floatformat:2 }} €</p>
+        <p class="cart-total mb-0">Итого: <strong>{{ total_discounted|floatformat:2 }} €</strong></p>
+        <p style="font-size: 11px; color: var(--rust);">Скидка {{ discount|floatformat:2 }} €</p>
+      {% else %}
+        <p class="cart-total">Итого: <strong>{{ cart.get_total_price }} €</strong></p>
+      {% endif %}
+    </div>
+  </div>
 </div>
 
 <div class="cart-actions">

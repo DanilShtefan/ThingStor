@@ -9,6 +9,9 @@ urlpatterns = [
     path('favorites/', include('favorites.urls', namespace='favorites')),
     path('users/', include('users.urls', namespace='users')),
     path('', include('checkout.urls', namespace='checkout')),
+    path('payment/', include('payment.urls', namespace='payment')),
+    path('coupons/', include('coupons.urls', namespace='coupons')),
+    path('contacts/', include('contact.urls', namespace='contact')),
     path('', include('main.urls', namespace='main')),
 ]
 

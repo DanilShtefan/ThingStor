@@ -73,6 +73,9 @@ class Favorites:
     def ids(self):
         return list(self.favorites.keys())
 
+    def has(self, product_id):
+        return str(product_id) in self.favorites
+
     def __len__(self):
         return len(self.favorites)
 

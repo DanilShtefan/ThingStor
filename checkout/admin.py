@@ -24,9 +24,9 @@ class DeliveryAddressAdmin(admin.ModelAdmin):
 
 @admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):
-    list_display = ['id', 'user', 'status', 'total_price', 'created']
-    list_filter = ['status', 'created']
-    search_fields = ['user__username', 'id']
+    list_display = ['id', 'user', 'status', 'paid', 'total_price', 'stripe_id', 'created']
+    list_filter = ['status', 'paid', 'created']
+    search_fields = ['user__username', 'id', 'stripe_id']
     list_editable = ['status']
     inlines = [OrderItemInline]
-    readonly_fields = ['delivery_address_snapshot', 'created', 'updated']
+    readonly_fields = ['stripe_id', 'created', 'updated']

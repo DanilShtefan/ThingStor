@@ -18,13 +18,15 @@ def popular_list(request, category_slug=None):
     cache_key = f'products:{category_slug or "all"}:{page_number}'
     cached = cache.get(cache_key)
 
+    if category_slug:
+        category = get_object_or_404(Category, slug=category_slug)
+
     if cached:
         page_products, total, has_next = cached
     else:
-        products = Product.objects.filter(available=True).select_related('category').prefetch_related('images')
+        products = Product.objects.filter(available=True).select_related('category').prefetch_related('images').order_by('id')
 
-        if category_slug:
-            category = get_object_or_404(Category, slug=category_slug)
+        if category:
             products = products.filter(category=category)
 
         paginator = Paginator(products, 8)
@@ -54,7 +56,7 @@ def homepage(request):
     cache_key = 'homepage_products'
     products = cache.get(cache_key)
     if products is None:
-        products = list(Product.objects.filter(available=True).select_related('category').prefetch_related('images').order_by('-created')[:4])
+        products = list(Product.objects.filter(available=True).select_related('category').prefetch_related('images').order_by('-created', 'id')[:4])
         cache.set(cache_key, products, 300)
     return render(request, 'main/index.html', {
         'products': products,
@@ -113,7 +115,7 @@ def product_search(request):
         products = Product.objects.filter(
             available=True,
             name__icontains=query
-        ).select_related('category').prefetch_related('images')
+        ).select_related('category').prefetch_related('images').order_by('id')
     else:
         products = Product.objects.none()
 
@@ -171,8 +173,6 @@ def about(request):
 def materials(request):
     return render(request, 'pages/materials.html')
 
-def contacts(request):
-    return render(request, 'pages/contacts.html')
 
 def delivery(request):
     return render(request, 'pages/delivery.html')

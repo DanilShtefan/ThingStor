@@ -37,9 +37,15 @@
       {% endwith %}
     {% endfor %}
 
+    {% if coupon and discount %}
+      <div class="d-flex justify-content-between" style="font-size: 13px;">
+        <span>Скидка ({{ coupon.code }})</span>
+        <span style="color: var(--rust);">−{{ discount|floatformat:2 }} €</span>
+      </div>
+    {% endif %}
     <div class="d-flex justify-content-between pt-3 mt-3" style="border-top: 1px solid var(--light-border);">
-      <span class="fw-medium">Итого:</span>
-      <span class="serif fs-5">{{ cart.get_total_price }} €</span>
+      <span class="serif fs-5 fw-medium">Итого:</span>
+      <span class="serif fs-5">{{ total_discounted|floatformat:2 }} €</span>
     </div>
   </div>
 

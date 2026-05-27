@@ -1,4 +1,5 @@
 from pathlib import Path
+from decouple import config
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -8,7 +9,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/6.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-y58fwhw936#1e3-b9hid5+4mz5a9y_v#-i79^+jr4b&6n)_y+0'
+SECRET_KEY = config('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -30,6 +31,9 @@ INSTALLED_APPS = [
     'favorites',
     'users',
     'checkout',
+    'contact',
+    'coupons',
+    'payment',
 ]
 
 if DEBUG:
@@ -64,6 +68,7 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
                 'cart.context_processors.cart',
                 'favorites.context_processors.favorites',
+                'coupons.context_processors.coupon',
             ],
         },
     },
@@ -78,9 +83,9 @@ WSGI_APPLICATION = 'thingstor.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'thingstor',
-        'USER': 'postgres',
-        'PASSWORD': 'thingstor123',
+        'NAME': config('DATABASE_NAME'),
+        'USER': config('DATABASE_USER'),
+        'PASSWORD': config('DATABASE_PASSWORD'),
         'HOST': 'localhost',
         'PORT': '',
     }
@@ -133,6 +138,7 @@ SESSION_SAVE_EVERY_REQUEST = True
 
 CART_SESSION_ID = 'cart'
 FAVORITES_SESSION_ID = 'favorites'
+COUPON_SESSION_ID = 'coupon'
 
 LOGIN_URL = 'users:login'
 LOGIN_REDIRECT_URL = 'users:profile'
@@ -157,3 +163,8 @@ CACHES = {
 SESSION_ENGINE = 'django.contrib.sessions.backends.cache'
 
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+STRIPE_PUBLISHABLE_KEY = config('STRIPE_PUBLISHABLE_KEY')
+STRIPE_SECRET_KEY = config('STRIPE_SECRET_KEY')
+STRIPE_API_VERSION = config('STRIPE_API_VERSION')
+STRIPE_WEBHOOCK_SECRET = config('STRIPE_WEBHOOK_SECRET')

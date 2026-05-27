@@ -49,6 +49,10 @@ class Order(models.Model):
     delivery_address_snapshot = models.TextField(blank=True)
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')
     total_price = models.DecimalField(max_digits=10, decimal_places=2)
+    paid = models.BooleanField('Оплачен', default=False)
+    stripe_id = models.CharField(max_length=250, blank=True)
+    coupon_code = models.CharField(max_length=50, blank=True)
+    discount_amount = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 

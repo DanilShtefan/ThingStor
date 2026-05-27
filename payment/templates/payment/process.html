@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Оплата заказа #{{ order.id }} | Вязаный Дом{% endblock %}
+
+{% block content %}
+<div class="text-center mb-5 pt-4">
+  <p class="section-label mb-3">Оплата</p>
+  <h1 class="section-title">Заказ #{{ order.id }}</h1>
+</div>
+
+<div class="row justify-content-center g-5">
+  <div class="col-md-6">
+    <h2 class="serif fs-4 mb-3">Товары</h2>
+    {% for item in order.items.all %}
+      <div class="d-flex justify-content-between align-items-center mb-2">
+        <div>
+          <p class="fw-medium mb-0" style="font-size: 14px;">{{ item.product_name }}</p>
+          <p class="text-muted mb-0" style="font-size: 12px;">{{ item.quantity }} × {{ item.product_price }} €</p>
+        </div>
+        <p class="fw-medium mb-0" style="font-size: 14px;">{{ item.product_price|floatformat:2 }} €</p>
+      </div>
+    {% endfor %}
+
+    {% if order.discount_amount %}
+      <div class="d-flex justify-content-between" style="font-size: 13px;">
+        <span>Скидка ({{ order.coupon_code }})</span>
+        <span style="color: var(--rust);">−{{ order.discount_amount|floatformat:2 }} €</span>
+      </div>
+    {% endif %}
+
+    <div class="d-flex justify-content-between pt-3 mt-3" style="border-top: 1px solid var(--light-border);">
+      <span class="serif fs-5 fw-medium">Итого:</span>
+      <span class="serif fs-5">{{ order.total_price }} €</span>
+    </div>
+
+    <form action="{% url 'payment:process' %}" method="post" class="mt-4">
+      {% csrf_token %}
+      <button type="submit" class="btn-dark-solid w-100">Оплатить через Stripe</button>
+    </form>
+  </div>
+</div>
+{% endblock %}
