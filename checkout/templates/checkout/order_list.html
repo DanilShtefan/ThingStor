@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Мои заказы | Вязаный Дом{% endblock %}
+
+{% block content %}
+<div class="text-center mb-5 pt-4">
+  <p class="section-label mb-3">История</p>
+  <h1 class="section-title">Мои заказы</h1>
+</div>
+
+<div class="row justify-content-center">
+  <div class="col-md-8 col-lg-6">
+    {% for order in orders %}
+      <a href="{% url 'checkout:order_detail' order.id %}" class="d-block p-4 mb-3" style="background: var(--warm-beige); text-decoration: none; color: inherit;">
+        <div class="d-flex justify-content-between align-items-start">
+          <div>
+            <p class="fw-medium mb-1">Заказ #{{ order.id }}</p>
+            <p class="text-muted mb-0" style="font-size: 12px;">{{ order.created|date:"d.m.Y H:i" }}</p>
+            <p class="text-muted mb-0" style="font-size: 12px;">{{ order.delivery_address_snapshot }}</p>
+          </div>
+          <div class="text-end">
+            <p class="serif fs-5 mb-1">{{ order.total_price }} €</p>
+            <span style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--rust);">{{ order.get_status_display }}</span>
+          </div>
+        </div>
+      </a>
+    {% empty %}
+      <p class="text-center text-muted">У вас ещё нет заказов</p>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

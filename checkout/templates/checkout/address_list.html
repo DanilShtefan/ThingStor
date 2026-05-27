@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Мои адреса | Вязаный Дом{% endblock %}
+
+{% block content %}
+<div class="text-center mb-5 pt-4">
+  <p class="section-label mb-3">Доставка</p>
+  <h1 class="section-title">Мои адреса</h1>
+</div>
+
+<div class="row justify-content-center">
+  <div class="col-md-8 col-lg-6">
+    {% if messages %}
+      {% for msg in messages %}
+        <p style="font-size: 13px; color: var(--rust); text-align: center; margin-bottom: 16px;">{{ msg }}</p>
+      {% endfor %}
+    {% endif %}
+
+    <div class="d-flex gap-3 mb-4">
+      <a href="{% url 'checkout:address_create' %}" class="outline-btn flex-grow-1 text-center">Ручной ввод</a>
+      <a href="{% url 'checkout:address_cdek' %}" class="outline-btn flex-grow-1 text-center">ПВЗ CDEK</a>
+    </div>
+
+    {% for addr in addresses %}
+      <div class="p-4 mb-3" style="background: var(--warm-beige); position: relative;">
+        {% if addr.is_default %}
+          <span style="position: absolute; top: 12px; right: 12px; font-size: 9px; text-transform: uppercase; letter-spacing: 0.15em; color: var(--rust);">По умолчанию</span>
+        {% endif %}
+        <p class="fw-medium mb-1">
+          {% if addr.address_type == 'cdek' %}
+            📦 ПВЗ CDEK
+          {% else %}
+            🏠 {{ addr.city }}, {{ addr.street }} {{ addr.house }}{% if addr.apartment %}, кв. {{ addr.apartment }}{% endif %}
+          {% endif %}
+        </p>
+        <p class="text-muted" style="font-size: 13px;">
+          {% if addr.address_type == 'cdek' %}
+            {{ addr.cdek_pvz_address }}
+          {% endif %}
+          {{ addr.recipient_name }} | {{ addr.phone }}
+        </p>
+        <div class="d-flex gap-2 mt-2" style="font-size: 12px;">
+          <a href="{% url 'checkout:address_edit' addr.id %}" style="color: var(--muted-text); text-decoration: underline;">Редактировать</a>
+          {% if not addr.is_default %}
+            <a href="{% url 'checkout:address_set_default' addr.id %}" style="color: var(--muted-text); text-decoration: underline;">Сделать основным</a>
+          {% endif %}
+          <a href="{% url 'checkout:address_delete' addr.id %}" style="color: var(--rust); text-decoration: underline;">Удалить</a>
+        </div>
+      </div>
+    {% empty %}
+      <p class="text-center text-muted">Нет сохранённых адресов</p>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,154 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}ПВЗ CDEK | Вязаный Дом{% endblock %}
+
+{% block content %}
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9/dist/leaflet.css" />
+<style>
+  #cdek-map { height: 400px; border: 1px solid var(--light-border); z-index: 1; }
+  .reg-elem { padding: 8px 12px; cursor: pointer; font-size: 13px; border-bottom: 1px solid var(--light-border); transition: background 0.2s; }
+  .reg-elem:hover { background: var(--cream); }
+  #region-list { max-height: 200px; overflow-y: auto; border: 1px solid var(--light-border); border-top: none; display: none; }
+  .leaflet-popup-content { font-size: 13px; font-family: inherit; }
+  .leaflet-popup-content strong { display: block; margin-bottom: 4px; }
+</style>
+
+<div class="row justify-content-center pt-4">
+  <div class="col-md-10 col-lg-8">
+    <div class="text-center mb-4">
+      <p class="section-label mb-3">Доставка</p>
+      <h1 class="section-title">Выберите ПВЗ CDEK</h1>
+    </div>
+
+    <form method="post" id="cdekForm" class="d-flex flex-column gap-4">
+      {% csrf_token %}
+      {{ form.address_type }}
+      {{ form.cdek_pvz_code }}
+      {{ form.cdek_pvz_address }}
+
+      <div>
+        <label class="form-label-sm">Город</label>
+        <input type="text" id="cityInput" class="form-control-clean" placeholder="Начните вводить город..." autocomplete="off">
+        <div id="region-list"></div>
+      </div>
+
+      <div id="cdek-map"></div>
+
+      <div id="pvz-info" class="p-4" style="display: none; background: var(--warm-beige);">
+        <p class="fw-medium mb-1" id="pvz-address"></p>
+        <p class="text-muted mb-0" style="font-size: 13px;" id="pvz-details"></p>
+      </div>
+
+      <div>
+        <label class="form-label-sm">{{ form.recipient_name.label }}</label>
+        {{ form.recipient_name }}
+      </div>
+      <div>
+        <label class="form-label-sm">{{ form.phone.label }}</label>
+        {{ form.phone }}
+      </div>
+
+      <button type="submit" class="btn-dark-solid w-100" id="submitBtn" disabled>Сохранить</button>
+    </form>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://unpkg.com/leaflet@1.9/dist/leaflet.js"></script>
+<script>
+  var map = L.map('cdek-map', { center: [55.76, 37.64], zoom: 5, zoomControl: true });
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; OpenStreetMap contributors'
+  }).addTo(map);
+
+  var markers = L.layerGroup().addTo(map);
+  var selectedCode = null;
+
+  var pvzCodeInput = document.querySelector('#id_cdek_pvz_code');
+  var pvzAddressInput = document.querySelector('#id_cdek_pvz_address');
+  var pvzInfo = document.getElementById('pvz-info');
+  var pvzAddress = document.getElementById('pvz-address');
+  var pvzDetails = document.getElementById('pvz-details');
+  var submitBtn = document.getElementById('submitBtn');
+  var cityInput = document.getElementById('cityInput');
+  var regionList = document.getElementById('region-list');
+
+  cityInput.addEventListener('input', function() {
+    var query = this.value.trim();
+    if (query.length < 2) {
+      regionList.style.display = 'none';
+      regionList.innerHTML = '';
+      return;
+    }
+    fetch('{% url "checkout:cdek_cities" %}?q=' + encodeURIComponent(query))
+      .then(function(r) { return r.json(); })
+      .then(function(data) {
+        regionList.innerHTML = '';
+        if (!data || data.length === 0) {
+          regionList.style.display = 'none';
+          return;
+        }
+        data.forEach(function(city) {
+          var div = document.createElement('div');
+          div.className = 'reg-elem';
+          div.textContent = city.country + ', ' + (city.region ? city.region + ', ' : '') + city.city;
+          div.dataset.code = city.code;
+          div.dataset.lat = city.latitude;
+          div.dataset.lon = city.longitude;
+          div.addEventListener('click', function() {
+            selectCity(city);
+          });
+          regionList.appendChild(div);
+        });
+        regionList.style.display = 'block';
+      });
+  });
+
+  function selectCity(city) {
+    cityInput.value = city.city;
+    regionList.style.display = 'none';
+    regionList.innerHTML = '';
+    map.setView([city.latitude, city.longitude], 11);
+    loadPvz(city.code);
+  }
+
+  function loadPvz(cityCode) {
+    markers.clearLayers();
+    pvzInfo.style.display = 'none';
+    submitBtn.disabled = true;
+    fetch('{% url "checkout:cdek_pvz" %}?city_code=' + cityCode)
+      .then(function(r) { return r.json(); })
+      .then(function(data) {
+        if (!data || data.length === 0) return;
+        data.forEach(function(pvz) {
+          var icon = L.divIcon({
+            className: '',
+            html: '<div style="width: 20px; height: 20px; background: var(--dark-brown); border-radius: 50%; border: 2px solid #fff; cursor: pointer;"></div>',
+            iconSize: [20, 20],
+            iconAnchor: [10, 10],
+          });
+          var marker = L.marker([pvz.location.latitude, pvz.location.longitude], { icon: icon }).addTo(markers);
+          marker.on('click', function() {
+            selectPvz(pvz);
+          });
+        });
+      });
+  }
+
+  function selectPvz(pvz) {
+    pvzCodeInput.value = pvz.code;
+    pvzAddressInput.value = pvz.location.address_full;
+    pvzAddress.textContent = pvz.location.address_full;
+    var details = '';
+    if (pvz.work_time) details += 'Режим: ' + pvz.work_time + '<br>';
+    if (pvz.phone) details += 'Тел: ' + pvz.phone + '<br>';
+    if (pvz.note) details += pvz.note;
+    pvzDetails.innerHTML = details;
+    pvzInfo.style.display = 'block';
+    submitBtn.disabled = false;
+    map.setView([pvz.location.latitude, pvz.location.longitude], 16);
+  }
+</script>
+{% endblock %}

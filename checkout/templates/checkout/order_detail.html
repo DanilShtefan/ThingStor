@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Заказ #{{ order.id }} | Вязаный Дом{% endblock %}
+
+{% block content %}
+<div class="text-center mb-5 pt-4">
+  <p class="section-label mb-3">Заказ</p>
+  <h1 class="section-title">Заказ #{{ order.id }}</h1>
+</div>
+
+<div class="row justify-content-center g-5">
+  <div class="col-md-5">
+    <h2 class="serif fs-4 mb-3">Товары</h2>
+    {% for item in order.items.all %}
+      <div class="d-flex justify-content-between align-items-center mb-2">
+        <div>
+          <p class="fw-medium mb-0" style="font-size: 14px;">{{ item.product_name }}</p>
+          <p class="text-muted mb-0" style="font-size: 12px;">{{ item.quantity }} × {{ item.product_price }} €</p>
+        </div>
+        <p class="fw-medium mb-0" style="font-size: 14px;">{{ item.product_price|floatformat:2 }} €</p>
+      </div>
+    {% endfor %}
+    <div class="d-flex justify-content-between pt-3 mt-3" style="border-top: 1px solid var(--light-border);">
+      <span class="fw-medium">Итого:</span>
+      <span class="serif fs-5">{{ order.total_price }} €</span>
+    </div>
+  </div>
+
+  <div class="col-md-4">
+    <h2 class="serif fs-4 mb-3">Доставка</h2>
+    <p style="font-size: 14px;">{{ order.delivery_address_snapshot }}</p>
+
+    <h2 class="serif fs-4 mb-3 mt-4">Статус</h2>
+    <span style="font-size: 12px; text-transform: uppercase; letter-spacing: 0.15em; color: var(--rust);">{{ order.get_status_display }}</span>
+
+    <div class="mt-4">
+      <a href="{% url 'checkout:order_list' %}" class="outline-btn d-inline-block">Все заказы</a>
+    </div>
+  </div>
+</div>
+{% endblock %}

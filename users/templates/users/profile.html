@@ -31,6 +31,10 @@
         <a href="{% url 'cart:cart_detail' %}" class="outline-btn flex-grow-1 text-center">Корзина</a>
         <a href="{% url 'favorites:favorites_detail' %}" class="outline-btn flex-grow-1 text-center">Избранное</a>
       </div>
+      <div class="d-flex gap-3 mt-2">
+        <a href="{% url 'checkout:address_list' %}" class="outline-btn flex-grow-1 text-center">Адреса доставки</a>
+        <a href="{% url 'checkout:order_list' %}" class="outline-btn flex-grow-1 text-center">Мои заказы</a>
+      </div>
 
       <form method="post" action="{% url 'users:logout' %}" class="mt-2">
         {% csrf_token %}
