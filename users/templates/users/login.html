@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Вход | Вязаный Дом{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center pt-5">
+  <div class="col-md-5 col-lg-4">
+    <div class="text-center mb-5">
+      <p class="section-label mb-3">Добро пожаловать</p>
+      <h1 class="section-title">Войти</h1>
+    </div>
+
+    <form method="post" class="d-flex flex-column gap-4">
+      {% csrf_token %}
+
+      <div>
+        <label for="id_username" class="form-label-sm">Имя пользователя</label>
+        <input type="text" name="username" id="id_username" class="form-control-clean" required>
+      </div>
+
+      <div>
+        <label for="id_password" class="form-label-sm">Пароль</label>
+        <input type="password" name="password" id="id_password" class="form-control-clean" required>
+      </div>
+
+      {% if form.errors %}
+        <p class="text-danger" style="font-size: 13px;">Неверное имя пользователя или пароль.</p>
+      {% endif %}
+
+      <button type="submit" class="btn-dark-solid w-100">Войти</button>
+    </form>
+
+    <p class="text-center text-muted mt-4" style="font-size: 13px;">
+      Нет аккаунта? <a href="{% url 'users:register' %}" style="color: var(--dark-brown); text-decoration: underline;">Зарегистрироваться</a>
+    </p>
+  </div>
+</div>
+{% endblock %}

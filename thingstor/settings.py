@@ -28,6 +28,7 @@ INSTALLED_APPS = [
     'main',
     'cart',
     'favorites',
+    'users',
 ]
 
 if DEBUG:
@@ -126,8 +127,15 @@ STATIC_ROOT = BASE_DIR / 'staticfiles'
 MEDIA_URL = 'media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
+SESSION_COOKIE_AGE = 604800
+SESSION_SAVE_EVERY_REQUEST = True
+
 CART_SESSION_ID = 'cart'
 FAVORITES_SESSION_ID = 'favorites'
+
+LOGIN_URL = 'users:login'
+LOGIN_REDIRECT_URL = 'users:profile'
+LOGOUT_REDIRECT_URL = 'main:homepage'
 
 INTERNAL_IPS = ['127.0.0.1']
 

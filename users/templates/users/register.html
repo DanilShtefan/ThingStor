@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Регистрация | Вязаный Дом{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center pt-5">
+  <div class="col-md-5 col-lg-4">
+    <div class="text-center mb-5">
+      <p class="section-label mb-3">Присоединяйтесь</p>
+      <h1 class="section-title">Регистрация</h1>
+    </div>
+
+    <form method="post" class="d-flex flex-column gap-4">
+      {% csrf_token %}
+
+      <div>
+        <label for="id_username" class="form-label-sm">Имя пользователя</label>
+        <input type="text" name="username" id="id_username" class="form-control-clean" maxlength="150" required>
+        {% if form.username.errors %}
+          <p class="text-danger" style="font-size: 12px; margin-top: 4px;">{{ form.username.errors.0 }}</p>
+        {% endif %}
+      </div>
+
+      <div>
+        <label for="id_email" class="form-label-sm">Email</label>
+        <input type="email" name="email" id="id_email" class="form-control-clean" required>
+        {% if form.email.errors %}
+          <p class="text-danger" style="font-size: 12px; margin-top: 4px;">{{ form.email.errors.0 }}</p>
+        {% endif %}
+      </div>
+
+      <div>
+        <label for="id_password1" class="form-label-sm">Пароль</label>
+        <input type="password" name="password1" id="id_password1" class="form-control-clean" required>
+        {% if form.password1.errors %}
+          <p class="text-danger" style="font-size: 12px; margin-top: 4px;">{{ form.password1.errors.0 }}</p>
+        {% endif %}
+      </div>
+
+      <div>
+        <label for="id_password2" class="form-label-sm">Подтверждение пароля</label>
+        <input type="password" name="password2" id="id_password2" class="form-control-clean" required>
+        {% if form.password2.errors %}
+          <p class="text-danger" style="font-size: 12px; margin-top: 4px;">{{ form.password2.errors.0 }}</p>
+        {% endif %}
+      </div>
+
+      <button type="submit" class="btn-dark-solid w-100">Создать аккаунт</button>
+    </form>
+
+    <p class="text-center text-muted mt-4" style="font-size: 13px;">
+      Уже есть аккаунт? <a href="{% url 'users:login' %}" style="color: var(--dark-brown); text-decoration: underline;">Войти</a>
+    </p>
+  </div>
+</div>
+{% endblock %}
