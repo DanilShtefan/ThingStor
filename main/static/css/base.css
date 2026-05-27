@@ -333,6 +333,7 @@ body {
     display: flex;
     justify-content: space-between;
     margin-top: 24px;
+    gap: 12px;
 }
 
 .empty-cart {
@@ -359,6 +360,229 @@ body {
 .cart-qty-select:focus {
     outline: none;
     border-color: #342E26;
+}
+
+@media (max-width: 767px) {
+    .cart-table,
+    .cart-table thead,
+    .cart-table tbody,
+    .cart-table tr,
+    .cart-table th,
+    .cart-table td {
+        display: block;
+    }
+
+    .cart-table thead {
+        display: none;
+    }
+
+    .cart-table tr {
+        position: relative;
+        padding: 16px 0 16px 80px;
+        border-bottom: 1px solid #D6CDC1;
+        display: flex;
+        flex-wrap: wrap;
+        align-items: flex-start;
+        min-height: 80px;
+    }
+
+    .cart-table td {
+        border: none;
+        padding: 2px 0;
+    }
+
+    .cart-table td:first-child {
+        position: absolute;
+        left: 0;
+        top: 16px;
+        padding: 0;
+        width: 64px;
+    }
+
+    .cart-table td:first-child img {
+        width: 64px !important;
+    }
+
+    .cart-table td:nth-child(2) {
+        font-size: 13px;
+        font-weight: 500;
+        width: 100%;
+        order: -1;
+        padding-right: 40px;
+    }
+
+    .cart-table td:nth-child(2) .product-link {
+        display: block;
+        white-space: normal;
+        word-break: break-word;
+    }
+
+    .cart-table td:nth-child(3) {
+        font-size: 12px;
+        color: #7A6B5A;
+    }
+
+    .cart-table td:nth-child(3)::before {
+        content: "Цена: ";
+        color: #7A6B5A;
+        font-size: 10px;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+    }
+
+    .cart-table td:nth-child(4) {
+        width: 100%;
+    }
+
+    .cart-table td:nth-child(5) {
+        font-family: 'Cormorant Garamond', Georgia, serif;
+        font-size: 1.1rem;
+    }
+
+    .cart-table td:nth-child(5)::before {
+        content: "Сумма: ";
+        font-family: sans-serif;
+        font-size: 10px;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: #7A6B5A;
+    }
+
+    .cart-table td:last-child {
+        position: absolute;
+        right: 0;
+        top: 16px;
+        padding: 0;
+    }
+
+    .cart-table td:last-child .outline-btn {
+        padding: 4px 8px !important;
+        font-size: 9px !important;
+    }
+
+    .cart-actions {
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .cart-actions .outline-btn {
+        width: 100%;
+        justify-content: center;
+        padding: 12px 24px;
+    }
+}
+
+@media (max-width: 767px) {
+    .cart-table.favorites-table tr {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        padding: 12px 0 12px 72px;
+        min-height: 64px;
+        gap: 2px 8px;
+    }
+
+    .cart-table.favorites-table td {
+        position: static !important;
+        border: none;
+        padding: 0;
+    }
+
+    .cart-table.favorites-table td:first-child {
+        position: absolute !important;
+        left: 0;
+        top: 50%;
+        transform: translateY(-50%);
+        padding: 0;
+        width: 60px;
+    }
+
+    .cart-table.favorites-table td:first-child img {
+        width: 60px !important;
+    }
+
+    .cart-table.favorites-table td:nth-child(2) {
+        font-size: 13px;
+        font-weight: 500;
+        width: auto;
+        flex: 1;
+        min-width: 0;
+        padding-right: 0;
+    }
+
+    .cart-table.favorites-table td:nth-child(3) {
+        font-size: 12px;
+        color: #7A6B5A;
+    }
+
+    .cart-table.favorites-table td:nth-child(3)::before {
+        content: "Цена: ";
+        color: #7A6B5A;
+        font-size: 10px;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+    }
+
+    .cart-table.favorites-table td:last-child {
+        width: 100%;
+        margin-top: 4px;
+    }
+
+    .cart-table.favorites-table td:last-child .outline-btn {
+        padding: 6px 12px !important;
+        font-size: 9px !important;
+    }
+}
+
+/* ─── Mobile Header ─── */
+@media (max-width: 575px) {
+    .header-inner {
+        padding: 0 12px;
+        height: 64px;
+    }
+
+    .header-logo {
+        font-size: 0;
+        letter-spacing: 0;
+    }
+
+    .header-logo img {
+        width: 48px;
+        height: 48px;
+        margin-right: 0 !important;
+    }
+
+    .header-actions {
+        gap: 6px;
+    }
+
+    .header-actions svg {
+        width: 16px;
+        height: 16px;
+    }
+
+    .main-content {
+        padding-top: 64px;
+    }
+
+    .cart-badge {
+        width: 14px;
+        height: 14px;
+        font-size: 8px;
+        top: -2px;
+        right: -2px;
+    }
+}
+
+@media (max-width: 380px) {
+    .header-actions {
+        gap: 4px;
+    }
+
+    .mobile-menu-btn svg {
+        width: 18px;
+        height: 18px;
+    }
 }
 
 /* ─── Responsive ─── */
