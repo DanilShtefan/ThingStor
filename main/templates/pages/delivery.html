@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Доставка и возврат | Вязаный Дом{% endblock %}
+
+{% block content %}
+<div class="text-center mb-5 pt-4">
+  <p class="section-label mb-3">Информация</p>
+  <h1 class="section-title">Доставка и возврат</h1>
+</div>
+
+<div class="delivery-features mb-5">
+  <div class="delivery-feature">
+    <div class="delivery-icon">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+    </div>
+    <p class="small">Бесплатная доставка от 15 000 ₽</p>
+  </div>
+  <div class="delivery-feature">
+    <div class="delivery-icon">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+    </div>
+    <p class="small">Возврат в течение 14 дней</p>
+  </div>
+  <div class="delivery-feature">
+    <div class="delivery-icon">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+    </div>
+    <p class="small">Безопасная оплата</p>
+  </div>
+  <div class="delivery-feature">
+    <div class="delivery-icon">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 12 20 22 4 22 4 12"/><rect x="2" y="7" width="20" height="5"/><line x1="12" y1="22" x2="12" y2="7"/><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/></svg>
+    </div>
+    <p class="small">Подарочная упаковка</p>
+  </div>
+</div>
+
+<section class="mb-5" style="max-width: 900px; margin-left: auto; margin-right: auto;">
+  <h2 class="serif fs-2 mb-4 pb-3" style="border-bottom: 1px solid var(--light-border);">Доставка</h2>
+  <div class="d-flex flex-column gap-4 text-muted">
+    <div>
+      <h3 class="fw-medium mb-1" style="color: var(--dark-brown);">По Москве</h3>
+      <p>Курьерская доставка — 1-2 рабочих дня. Стоимость: 500 ₽. Бесплатно при заказе от 15 000 ₽.</p>
+    </div>
+    <div>
+      <h3 class="fw-medium mb-1" style="color: var(--dark-brown);">По России</h3>
+      <p>СДЭК, Почта России — 3-10 рабочих дней в зависимости от региона. Стоимость рассчитывается при оформлении заказа.</p>
+    </div>
+    <div>
+      <h3 class="fw-medium mb-1" style="color: var(--dark-brown);">Самовывоз</h3>
+      <p>Бесплатно из нашего шоурума по адресу: Москва, ул. Большая Никитская, 12. Заказ будет готов к выдаче в течение 1 рабочего дня.</p>
+    </div>
+  </div>
+</section>
+
+<section class="mb-5" style="max-width: 900px; margin-left: auto; margin-right: auto;">
+  <h2 class="serif fs-2 mb-4 pb-3" style="border-bottom: 1px solid var(--light-border);">Оплата</h2>
+  <div class="text-muted">
+    <p class="mb-3">Мы принимаем следующие способы оплаты:</p>
+    <ul class="list-unstyled d-flex flex-column gap-2">
+      <li class="d-flex align-items-center gap-3"><span class="dot"></span>Банковские карты (Visa, MasterCard, МИР)</li>
+      <li class="d-flex align-items-center gap-3"><span class="dot"></span>СБП (Система быстрых платежей)</li>
+      <li class="d-flex align-items-center gap-3"><span class="dot"></span>Наличными при получении (только Москва)</li>
+    </ul>
+  </div>
+</section>
+
+<section style="max-width: 900px; margin-left: auto; margin-right: auto;">
+  <h2 class="serif fs-2 mb-4 pb-3" style="border-bottom: 1px solid var(--light-border);">Возврат и обмен</h2>
+  <div class="d-flex flex-column gap-4 text-muted">
+    <p>Вы можете вернуть или обменять товар в течение 14 дней с момента получения, если он не подошёл по размеру или не оправдал ожиданий.</p>
+    <div>
+      <h3 class="fw-medium mb-2" style="color: var(--dark-brown);">Условия возврата</h3>
+      <ul class="list-unstyled d-flex flex-column gap-2">
+        <li class="d-flex align-items-start gap-3"><span class="dot mt-2"></span>Изделие должно сохранить товарный вид и не иметь следов носки</li>
+        <li class="d-flex align-items-start gap-3"><span class="dot mt-2"></span>Все бирки и ярлыки должны быть сохранены</li>
+        <li class="d-flex align-items-start gap-3"><span class="dot mt-2"></span>Необходимо предоставить чек или подтверждение заказа</li>
+      </ul>
+    </div>
+    <p>Для оформления возврата свяжитесь с нами по email info@vyazanydom.ru или по телефону +7 (495) 123-45-67.</p>
+  </div>
+</section>
+{% endblock %}

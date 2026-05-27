@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Избранное{% endblock %}
+
+{% block content %}
+
+{% if favorites|length %}
+<div class="table-responsive">
+    <table class="cart-table w-100">
+        <thead>
+            <tr>
+                <th>Изображение</th>
+                <th>Товар</th>
+                <th>Цена</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for product in favorites %}
+            <tr>
+                <td>
+                    <a href="{% url 'main:product_detail' product.category.slug product.id %}">
+                        {% with product.images.all|first as img %}
+                        <img src="{% if img %}{{ img.image.url }}{% else %}{% static 'img/no_image.png' %}{% endif %}" alt="{{ product.name }}" style="width: 80px; height: auto;">
+                        {% endwith %}
+                    </a>
+                </td>
+                <td>
+                    <a href="{% url 'main:product_detail' product.category.slug product.id %}" class="product-link">{{ product.name }}</a>
+                </td>
+                <td>
+                    {% if product.discount %}
+                        <span style="text-decoration: line-through; color: #7A6B5A;">{{ product.price }} €</span>
+                        <span style="margin-left: 6px;">{{ product.get_discounted_price }} €</span>
+                    {% else %}
+                        {{ product.price }} €
+                    {% endif %}
+                </td>
+                <td>
+                    <form action="{% url 'favorites:favorites_remove' product.id %}" method="post">
+                        {% csrf_token %}
+                        <button type="submit" class="outline-btn" style="padding: 8px 16px; font-size: 10px; border-color: rgba(139, 79, 60, 0.4); color: #8B4F3C;">Удалить</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<div class="cart-actions">
+    <a href="{% url 'main:popular_list' %}" class="outline-btn d-inline-flex align-items-center gap-2">Продолжить покупки</a>
+</div>
+{% else %}
+<div class="empty-cart">
+    <p>Избранное пусто</p>
+    <a href="{% url 'main:popular_list' %}" class="outline-btn d-inline-flex align-items-center gap-2">В каталог</a>
+</div>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Наша история | Вязаный Дом{% endblock %}
+
+{% block content %}
+<div class="page-hero" style="background-image: url('https://images.unsplash.com/photo-1558171813-4c088753af8f?q=80&w=2574&auto=format&fit=crop');">
+  <div class="page-hero-overlay"></div>
+  <div class="page-hero-content">
+    <p class="section-label" style="color: rgba(255,255,255,0.8);">О нас</p>
+    <h1 class="page-hero-title">Наша история</h1>
+  </div>
+</div>
+
+<section class="page-section">
+  <div class="container-narrow text-center">
+    <p class="serif fs-3 lh-lg mb-5" style="color: var(--dark-brown);">
+      Вязаный Дом родился из любви к традиционному ремеслу и стремления сохранить искусство ручного вязания для будущих поколений.
+    </p>
+    <div class="text-muted lh-lg" style="max-width: 720px; margin: 0 auto;">
+      <p class="mb-4">Всё началось в 2018 году, когда основательница бренда Анна Морозова решила возродить семейные традиции вязания, которые передавались в её семье из поколения в поколение. Её бабушка, потомственная мастерица из Оренбурга, научила её всем секретам создания уникальных вязаных изделий.</p>
+      <p class="mb-4">Сегодня Вязаный Дом — это команда талантливых мастеров, объединённых общей страстью к качеству и вниманием к деталям. Каждое изделие создаётся вручную, с использованием только натуральных материалов: мериносовой шерсти из Новой Зеландии, монгольского кашемира и перуанской альпаки.</p>
+      <p>Мы верим, что настоящая роскошь — это не логотипы и бренды, а качество материалов, мастерство исполнения и та любовь, которую мастер вкладывает в каждую петлю. Наши изделия созданы, чтобы служить вам долгие годы, становясь только мягче и уютнее со временем.</p>
+    </div>
+  </div>
+</section>
+
+<section class="page-section bg-beige">
+  <div class="container-wide text-center">
+    <p class="section-label mb-2">Наши ценности</p>
+    <h2 class="section-title mb-5">Что нас вдохновляет</h2>
+    <div class="row g-5">
+      <div class="col-md-4">
+        <div class="values-circle mx-auto mb-4">
+          <span class="serif fs-2">01</span>
+        </div>
+        <h3 class="serif fs-4 mb-3">Качество</h3>
+        <p class="text-muted">Мы не идём на компромиссы в выборе материалов. Только лучшее сырьё от проверенных поставщиков попадает в наши изделия.</p>
+      </div>
+      <div class="col-md-4">
+        <div class="values-circle mx-auto mb-4">
+          <span class="serif fs-2">02</span>
+        </div>
+        <h3 class="serif fs-4 mb-3">Традиции</h3>
+        <p class="text-muted">Каждая техника вязания, которую мы используем, имеет многовековую историю и передаётся от мастера к ученику.</p>
+      </div>
+      <div class="col-md-4">
+        <div class="values-circle mx-auto mb-4">
+          <span class="serif fs-2">03</span>
+        </div>
+        <h3 class="serif fs-4 mb-3">Устойчивость</h3>
+        <p class="text-muted">Мы создаём вещи, которые служат годами, а не сезонами. Это наш вклад в борьбу с культурой одноразового потребления.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="page-section">
+  <div class="container-wide">
+    <div class="row g-5 align-items-center">
+      <div class="col-lg-6">
+        <div class="aspect-square overflow-hidden">
+          <img src="https://images.unsplash.com/photo-1594938298603-c8148c4dae35?q=80&w=2680&auto=format&fit=crop" alt="Наша команда мастеров" class="w-100 h-100 object-fit-cover">
+        </div>
+      </div>
+      <div class="col-lg-6">
+        <p class="section-label mb-3">Наша команда</p>
+        <h2 class="section-title mb-4">Мастера своего дела</h2>
+        <p class="text-muted lh-lg mb-4">В нашей команде работают 12 мастеров, каждый из которых прошёл многолетнее обучение традиционным техникам вязания. Средний стаж наших мастеров — более 15 лет.</p>
+        <p class="text-muted lh-lg">Мы гордимся тем, что создаём не просто рабочие места, а сообщество единомышленников, объединённых любовью к своему ремеслу.</p>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

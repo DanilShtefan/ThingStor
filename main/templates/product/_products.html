@@ -1,0 +1,35 @@
+{% load static %}
+{% for product in products %}
+<div class="col" style="position: relative;">
+    <a href="{% url 'main:product_detail' product.category.slug product.id %}" class="category-card">
+        {% with product.images.all|first as img %}
+        <img src="{% if img %}{{ img.image.url }}{% else %}{% static 'img/no_image.png' %}{% endif %}" alt="{{ product.name }}">
+        {% endwith %}
+        <div class="category-overlay"></div>
+        <div class="category-info">
+            <p style="font-size: 10px; letter-spacing: 0.25em; opacity: 0.8; text-transform: uppercase; margin-bottom: 4px;">{{ product.category.name }}</p>
+            <h3 style="font-family: 'Cormorant Garamond', Georgia, serif; font-size: 1.25rem; font-weight: 400; margin: 0;">{{ product.name }}</h3>
+            <p style="font-size: 13px; margin-top: 4px; margin-bottom: 0;">
+                {% if product.discount %}
+                    <span style="text-decoration: line-through; opacity: 0.7;">{{ product.price }} €</span>
+                    <span style="margin-left: 6px;">{{ product.get_discounted_price }} €</span>
+                {% else %}
+                    {{ product.price }} €
+                {% endif %}
+            </p>
+        </div>
+    </a>
+    {% with product_id=product.id|stringformat:"d" %}
+    <form action="{% url 'favorites:favorites_toggle' product.id %}" method="post" style="position: absolute; top: 12px; right: 12px; z-index: 2;">
+        {% csrf_token %}
+        <button type="submit" aria-label="Избранное" style="width: 36px; height: 36px; border-radius: 50%; background: rgba(255,255,255,0.9); border: none; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'">
+            {% if product_id in favorites.ids %}
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="#8B4F3C" stroke="#8B4F3C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+            {% else %}
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#8B4F3C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+            {% endif %}
+        </button>
+    </form>
+    {% endwith %}
+</div>
+{% endfor %}

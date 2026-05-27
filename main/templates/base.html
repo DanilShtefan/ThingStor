@@ -1,0 +1,136 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{% endblock title %}</title>
+    <link rel="icon" type="image/svg+xml" href="{% static 'img/logo.svg' %}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'bootstrap\css\bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/base.css' %}">
+</head>
+<body class="d-flex flex-column min-vh-100">
+
+    <header class="site-header">
+        <div class="header-inner">
+            <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Меню">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+            </button>
+
+            <nav class="desktop-nav">
+                <a href="{% url 'main:popular_list' %}#collection">Коллекция</a>
+                <a href="/about/">О нас</a>
+                <a href="{% url 'main:contacts' %}">Контакты</a>
+            </nav>
+            
+            <a href="{% url 'main:homepage' %}" class="header-logo">
+                <img src="{% static 'img/logo.svg' %}" alt="" width="72" height="72" style="vertical-align: middle; margin-right: 14px;">
+                Вязаный Дом
+            </a>
+
+            <div class="header-actions">
+                <button aria-label="Поиск" class="icon-btn">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                </button>
+                <a href="{% url 'favorites:favorites_detail' %}" class="icon-btn" aria-label="Избранное">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+                    {% with total=favorites|length %}
+                        {% if total %}
+                            <span class="cart-badge">{{ total }}</span>
+                        {% endif %}
+                    {% endwith %}
+                </a>
+                <button aria-label="Аккаунт" class="icon-btn desktop-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                </button>
+                <a href="{% url 'cart:cart_detail' %}" class="icon-btn cart-btn" aria-label="Корзина">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+                    {% with total=cart|length %}
+                        {% if total %}
+                            <span class="cart-badge">{{ total }}</span>
+                        {% endif %}
+                    {% endwith %}
+                </a>
+            </div>
+        </div>
+
+        <div class="mobile-menu" id="mobileMenu">
+            <nav>
+                <a href="{% url 'main:popular_list' %}#collection">Коллекция</a>
+                <a href="/about/">О нас</a>
+                <a href="{% url 'main:contacts' %}">Контакты</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="main-content flex-grow-1">
+        <div class="container page-container">
+            {% block content %}
+            {% endblock content %}
+        </div>
+    </main>
+
+    <footer class="site-footer">
+        <div class="footer-inner">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <h3 class="footer-logo">
+                        <img src="{% static 'img/logo.svg' %}" alt="" width="72" height="72" style="vertical-align: middle; margin-right: 14px;">
+                        Вязаный Дом
+                    </h3>
+                    <p class="footer-desc">Роскошные вязаные изделия ручной работы из натуральных материалов высочайшего качества.</p>
+                </div>
+                <div class="footer-col">
+                    <h4 class="footer-col-title">Магазин</h4>
+                    <ul>
+                        <li><a href="{% url 'main:popular_list' %}">Новинки</a></li>
+                        <li><a href="{% url 'main:popular_list' %}">Свитера</a></li>
+                        <li><a href="{% url 'main:popular_list' %}">Кардиганы</a></li>
+                        <li><a href="{% url 'main:popular_list' %}">Аксессуары</a></li>
+                        <li><a href="#">Подарочные сертификаты</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4 class="footer-col-title">О компании</h4>
+                    <ul>
+                        <li><a href="{% url 'main:about' %}">Наша история</a></li>
+                        <li><a href="{% url 'main:about' %}">Мастера</a></li>
+                        <li><a href="{% url 'main:materials' %}">Материалы</a></li>
+                        <li><a href="{% url 'main:about' %}">Устойчивое развитие</a></li>
+                        <li><a href="{% url 'main:contacts' %}">Контакты</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4 class="footer-col-title">Помощь</h4>
+                    <ul>
+                        <li><a href="{% url 'main:delivery' %}">Доставка и возврат</a></li>
+                        <li><a href="{% url 'main:care' %}">Уход за изделиями</a></li>
+                        <li><a href="{% url 'main:sizes' %}">Таблица размеров</a></li>
+                        <li><a href="{% url 'main:contacts' %}">Контакты</a></li>
+                        <li><a href="{% url 'main:faq' %}">FAQ</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; {% now "Y" %} Вязаный Дом. Все права защищены.</p>
+                <div class="footer-social">
+                    <a href="#">Instagram</a>
+                    <a href="#">Telegram</a>
+                    <a href="#">Pinterest</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="{% static 'bootstrap\js\bootstrap.bundle.min.js' %}"></script>
+    <script>
+        document.getElementById('mobileMenuBtn').addEventListener('click', function() {
+            document.getElementById('mobileMenu').classList.toggle('open');
+        });
+    </script>
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

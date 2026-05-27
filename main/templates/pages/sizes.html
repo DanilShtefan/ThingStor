@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Таблица размеров | Вязаный Дом{% endblock %}
+
+{% block content %}
+<div class="text-center mb-5 pt-4">
+  <p class="section-label mb-3">Руководство</p>
+  <h1 class="section-title mb-3">Таблица размеров</h1>
+  <p class="text-muted" style="max-width: 580px; margin: 0 auto;">
+    Все измерения указаны в сантиметрах. Для определения размера измерьте обхват груди, талии и бёдер по наиболее выступающим точкам.
+  </p>
+</div>
+
+<section class="mb-5" style="max-width: 900px; margin: 0 auto;">
+  <h2 class="serif fs-2 mb-4">Женские размеры</h2>
+  <div class="table-responsive">
+    <table class="size-table">
+      <thead>
+        <tr>
+          <th>Размер</th>
+          <th>Обхват груди</th>
+          <th>Обхват талии</th>
+          <th>Обхват бёдер</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>XS</td><td class="text-muted">80-84</td><td class="text-muted">60-64</td><td class="text-muted">86-90</td></tr>
+        <tr><td>S</td><td class="text-muted">84-88</td><td class="text-muted">64-68</td><td class="text-muted">90-94</td></tr>
+        <tr><td>M</td><td class="text-muted">88-92</td><td class="text-muted">68-72</td><td class="text-muted">94-98</td></tr>
+        <tr><td>L</td><td class="text-muted">92-96</td><td class="text-muted">72-76</td><td class="text-muted">98-102</td></tr>
+        <tr><td>XL</td><td class="text-muted">96-100</td><td class="text-muted">76-80</td><td class="text-muted">102-106</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section class="mb-5" style="max-width: 900px; margin: 0 auto;">
+  <h2 class="serif fs-2 mb-4">Мужские размеры</h2>
+  <div class="table-responsive">
+    <table class="size-table">
+      <thead>
+        <tr>
+          <th>Размер</th>
+          <th>Обхват груди</th>
+          <th>Обхват талии</th>
+          <th>Обхват бёдер</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>S</td><td class="text-muted">92-96</td><td class="text-muted">76-80</td><td class="text-muted">94-98</td></tr>
+        <tr><td>M</td><td class="text-muted">96-100</td><td class="text-muted">80-84</td><td class="text-muted">98-102</td></tr>
+        <tr><td>L</td><td class="text-muted">100-104</td><td class="text-muted">84-88</td><td class="text-muted">102-106</td></tr>
+        <tr><td>XL</td><td class="text-muted">104-108</td><td class="text-muted">88-92</td><td class="text-muted">106-110</td></tr>
+        <tr><td>XXL</td><td class="text-muted">108-112</td><td class="text-muted">92-96</td><td class="text-muted">110-114</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section class="p-4 p-md-5 bg-beige" style="max-width: 900px; margin: 0 auto;">
+  <h2 class="serif fs-3 mb-4">Как снять мерки</h2>
+  <ul class="list-unstyled d-flex flex-column gap-3 text-muted">
+    <li class="d-flex align-items-start gap-3"><span class="dot mt-2"></span><span><strong style="color: var(--dark-brown);">Обхват груди:</strong> измеряйте по наиболее выступающим точкам груди, сантиметровая лента должна проходить горизонтально.</span></li>
+    <li class="d-flex align-items-start gap-3"><span class="dot mt-2"></span><span><strong style="color: var(--dark-brown);">Обхват талии:</strong> измеряйте по самой узкой части талии, обычно чуть выше пупка.</span></li>
+    <li class="d-flex align-items-start gap-3"><span class="dot mt-2"></span><span><strong style="color: var(--dark-brown);">Обхват бёдер:</strong> измеряйте по наиболее выступающим точкам ягодиц.</span></li>
+  </ul>
+  <p class="mt-3 small text-muted">Если ваши мерки находятся между размерами, рекомендуем выбрать больший размер для свободной посадки или меньший для более облегающего силуэта.</p>
+</section>
+{% endblock %}

@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Уход за изделиями | Вязаный Дом{% endblock %}
+
+{% block content %}
+<div class="text-center mb-5 pt-4">
+  <p class="section-label mb-3">Рекомендации</p>
+  <h1 class="section-title mb-3">Уход за изделиями</h1>
+  <p class="text-muted" style="max-width: 540px; margin: 0 auto;">
+    Правильный уход поможет сохранить красоту и качество ваших вязаных изделий на долгие годы. Следуйте нашим рекомендациям.
+  </p>
+</div>
+
+<div class="care-sections" style="max-width: 900px; margin: 0 auto;">
+  <div class="care-section">
+    <div class="care-number serif">01</div>
+    <div class="care-content">
+      <h2 class="serif fs-2 mb-3">Стирка</h2>
+      <ul class="list-unstyled d-flex flex-column gap-3">
+        <li class="d-flex align-items-start gap-3"><span class="dot mt-2"></span>Стирайте вручную в прохладной воде (до 30°C)</li>
+        <li class="d-flex align-items-start gap-3"><span class="dot mt-2"></span>Используйте специальные средства для шерсти</li>
+        <li class="d-flex align-items-start gap-3"><span class="dot mt-2"></span>Не выкручивайте и не трите изделие</li>
+        <li class="d-flex align-items-start gap-3"><span class="dot mt-2"></span>Машинная стирка только в режиме «шерсть» в защитном мешке</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="care-section">
+    <div class="care-number serif">02</div>
+    <div class="care-content">
+      <h2 class="serif fs-2 mb-3">Сушка</h2>
+      <ul class="list-unstyled d-flex flex-column gap-3">
+        <li class="d-flex align-items-start gap-3"><span class="dot mt-2"></span>Разложите изделие на горизонтальной поверхности</li>
+        <li class="d-flex align-items-start gap-3"><span class="dot mt-2"></span>Придайте правильную форму руками</li>
+        <li class="d-flex align-items-start gap-3"><span class="dot mt-2"></span>Сушите вдали от прямых солнечных лучей</li>
+        <li class="d-flex align-items-start gap-3"><span class="dot mt-2"></span>Не используйте сушильную машину</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="care-section">
+    <div class="care-number serif">03</div>
+    <div class="care-content">
+      <h2 class="serif fs-2 mb-3">Хранение</h2>
+      <ul class="list-unstyled d-flex flex-column gap-3">
+        <li class="d-flex align-items-start gap-3"><span class="dot mt-2"></span>Храните изделия в сложенном виде, не на вешалке</li>
+        <li class="d-flex align-items-start gap-3"><span class="dot mt-2"></span>Используйте натуральные средства от моли (лаванда, кедр)</li>
+        <li class="d-flex align-items-start gap-3"><span class="dot mt-2"></span>Перед длительным хранением изделие должно быть чистым</li>
+        <li class="d-flex align-items-start gap-3"><span class="dot mt-2"></span>Храните в дышащих чехлах из хлопка</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="care-section">
+    <div class="care-number serif">04</div>
+    <div class="care-content">
+      <h2 class="serif fs-2 mb-3">Уход</h2>
+      <ul class="list-unstyled d-flex flex-column gap-3">
+        <li class="d-flex align-items-start gap-3"><span class="dot mt-2"></span>Давайте изделию «отдохнуть» между носками</li>
+        <li class="d-flex align-items-start gap-3"><span class="dot mt-2"></span>Удаляйте катышки специальной машинкой или вручную</li>
+        <li class="d-flex align-items-start gap-3"><span class="dot mt-2"></span>Проветривайте изделия на свежем воздухе</li>
+        <li class="d-flex align-items-start gap-3"><span class="dot mt-2"></span>При появлении пятен обратитесь в химчистку</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="bg-beige text-center p-5 mt-5" style="max-width: 900px; margin-left: auto; margin-right: auto;">
+  <h3 class="serif fs-3 mb-3">Нужна помощь?</h3>
+  <p class="text-muted mb-4">Если у вас есть вопросы по уходу за изделиями, свяжитесь с нами.</p>
+  <a href="{% url 'main:contacts' %}" class="outline-btn">Связаться с нами</a>
+</div>
+{% endblock %}

@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}{{ product.name }}{% endblock %}
+
+{% block content %}
+{% with images=product.images.all %}
+<nav style="font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: #7A6B5A; margin-bottom: 32px;">
+    <a href="{% url 'main:popular_list' %}" style="color: #7A6B5A; text-decoration: none; transition: color 0.2s;">Главная</a>
+    <span style="margin: 0 8px;">/</span>
+    <a href="{% url 'main:popular_list_by_category' product.category.slug %}" style="color: #7A6B5A; text-decoration: none; transition: color 0.2s;">{{ product.category.name }}</a>
+    <span style="margin: 0 8px;">/</span>
+    <span style="color: #342E26;">{{ product.name }}</span>
+</nav>
+
+<div class="row g-5">
+    <div class="col-md-6">
+        <div class="product-image-wrap" style="aspect-ratio: 1/1; max-width: 500px;">
+            <img id="mainImage" src="{% if images.0 %}{{ images.0.image.url }}{% else %}{% static 'img/no_image.png' %}{% endif %}" alt="{{ product.name }}">
+        </div>
+        {% if images|length > 1 %}
+        <div class="d-flex gap-2 mt-3">
+            {% for img in images %}
+            <div class="product-image-wrap" style="aspect-ratio: 1/1; width: 72px; cursor: pointer; border: 1px solid transparent;" onmouseover="document.getElementById('mainImage').src='{{ img.image.url }}'; this.style.borderColor='#342E26';" onmouseout="this.style.borderColor='transparent';">
+                <img src="{{ img.image.url }}" alt="{{ product.name }}">
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+    </div>
+    <div class="col-md-6">
+        <p class="section-label mb-2">{{ product.category.name }}</p>
+        <h1 class="section-title mb-3">{{ product.name }}</h1>
+        <div class="mb-4" style="font-size: 1.5rem; font-weight: 400;">
+            {% if product.discount %}
+                <span style="color: #8B4F3C; font-size: 13px; letter-spacing: 0.1em; text-transform: uppercase; font-weight: 400;">{{ product.discount }}% скидка</span><br>
+                <span style="text-decoration: line-through; color: #7A6B5A; font-size: 1rem;">{{ product.price }} €</span>
+                <span style="margin-left: 8px;">{{ product.get_discounted_price }} €</span>
+            {% else %}
+                {{ product.price }} €
+            {% endif %}
+        </div>
+        <div style="color: #7A6B5A; line-height: 1.7; margin-bottom: 32px;">
+            {{ product.description|linebreaks }}
+        </div>
+
+        <form action="{% url 'cart:cart_add' product.id %}" method="post">
+            {% csrf_token %}
+            <div class="d-flex align-items-center gap-3">
+                <select name="quantity" class="cart-qty-select">
+                    {% for i in "1234567890"|make_list %}
+                    <option value="{{ forloop.counter }}">{{ forloop.counter }}</option>
+                    {% endfor %}
+                </select>
+                {{ cart_product_form.override }}
+                <button type="submit" class="outline-btn" style="background: #342E26; color: #F5F0EA; border-color: #342E26;">В корзину</button>
+            </div>
+        </form>
+        {% comment %} {% with product_id=product.id|stringformat:"d" %}
+        <form action="{% url 'favorites:favorites_toggle' product.id %}" method="post" class="mt-3">
+            {% csrf_token %}
+            <button type="submit" class="outline-btn d-inline-flex align-items-center gap-2" style="border-color: rgba(139, 79, 60, 0.4); color: #8B4F3C;">
+                {% if product_id in favorites.ids %}
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="#8B4F3C" stroke="#8B4F3C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+                <span>В избранном</span>
+                {% else %}
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+                <span>В избранное</span>
+                {% endif %}
+            </button>
+        </form>
+        {% endwith %} {% endcomment %}
+    </div>
+</div>
+{% endwith %}
+{% endblock %}

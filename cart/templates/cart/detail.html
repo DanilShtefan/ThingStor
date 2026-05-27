@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Корзина{% endblock %}
+
+{% block content %}
+{% comment %} <h1 class="section-title mb-4">Корзина</h1> {% endcomment %}
+
+{% if cart|length %}
+<div class="table-responsive">
+    <table class="cart-table w-100">
+        <thead>
+            <tr>
+                <th>Изображение</th>
+                <th>Товар</th>
+                <th>Цена</th>
+                <th>Количество</th>
+                <th>Сумма</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in cart %}
+            {% with product=item.product %}
+            <tr>
+                <td>
+                    <a href="{% url 'main:product_detail' product.category.slug product.id %}">
+                        {% with product.images.all|first as img %}
+                        <img src="{% if img %}{{ img.image.url }}{% else %}{% static 'img/no_image.png' %}{% endif %}" alt="{{ product.name }}" style="width: 80px; height: auto;">
+                        {% endwith %}
+                    </a>
+                </td>
+                <td>
+                    <a href="{% url 'main:product_detail' product.category.slug product.id %}" class="product-link">{{ product.name }}</a>
+                </td>
+                <td>{{ item.price }} €</td>
+                <td>
+                    <form action="{% url 'cart:cart_add' product.id %}" method="post" class="d-flex align-items-center gap-2">
+                        {% csrf_token %}
+                        <select name="quantity" class="cart-qty-select">
+                            {% for i in "1234567890"|make_list %}
+                            <option value="{{ forloop.counter }}" {% if forloop.counter == item.quantity %}selected{% endif %}>{{ forloop.counter }}</option>
+                            {% endfor %}
+                        </select>
+                        <input type="hidden" name="override" value="true">
+                        <button type="submit" class="outline-btn" style="padding: 8px 16px; font-size: 10px;">Обновить</button>
+                    </form>
+                </td>
+                <td>{{ item.total_price }} €</td>
+                <td>
+                    <form action="{% url 'cart:cart_remove' product.id %}" method="post">
+                        {% csrf_token %}
+                        <button type="submit" class="outline-btn" style="padding: 8px 16px; font-size: 10px; border-color: rgba(139, 79, 60, 0.4); color: #8B4F3C;">Удалить</button>
+                    </form>
+                </td>
+            </tr>
+            {% endwith %}
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<div class="text-end">
+    <p class="cart-total">Итого: <strong>{{ cart.get_total_price }} €</strong></p>
+</div>
+
+<div class="cart-actions">
+    <a href="{% url 'main:popular_list' %}" class="outline-btn d-inline-flex align-items-center gap-2">Продолжить покупки</a>
+    <a href="#" class="outline-btn d-inline-flex align-items-center gap-2" style="background: #342E26; color: #F5F0EA; border-color: #342E26;">Оформить заказ</a>
+</div>
+{% else %}
+<div class="empty-cart">
+    <p>Корзина пуста</p>
+    <a href="{% url 'main:popular_list' %}" class="outline-btn d-inline-flex align-items-center gap-2">Продолжить покупки</a>
+</div>
+{% endif %}
+{% endblock %}

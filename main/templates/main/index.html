@@ -1,0 +1,513 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Вязаный Дом — Роскошные вязаные изделия ручной работы{% endblock %}
+
+{% block content %}
+<style>
+  :root {
+    --cream: #F5F0EA;
+    --dark-brown: #342E26;
+    --warm-beige: #E6DFD6;
+    --rust: #8B4F3C;
+    --muted-text: #7A6B5A;
+    --light-border: #D6CDC1;
+  }
+  .serif { font-family: 'Cormorant Garamond', Georgia, serif; }
+  .full-width {
+    width: 100vw;
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  .hero-slide {
+    height: calc(100vh - 80px);
+    position: relative;
+    background-size: cover;
+    background-position: center;
+  }
+  .hero-overlay {
+    position: absolute; inset: 0;
+    background: rgba(52, 46, 38, 0.3);
+  }
+  .hero-content {
+    position: relative; z-index: 1;
+  }
+  .hero-btn {
+    border: 1px solid rgba(255,255,255,0.6);
+    padding: 16px 32px;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: #fff;
+    transition: all 0.3s;
+  }
+  .hero-btn:hover {
+    background: #fff;
+    color: var(--dark-brown);
+  }
+  .section-label {
+    font-size: 11px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--muted-text);
+  }
+  .section-title {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: 2.5rem;
+    font-weight: 400;
+    letter-spacing: 0.02em;
+  }
+  @media (min-width: 768px) {
+    .section-title { font-size: 3rem; }
+  }
+  .category-card {
+    aspect-ratio: 3/4;
+    overflow: hidden;
+    display: block;
+    position: relative;
+  }
+  .category-card img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    transition: transform 0.7s;
+  }
+  .category-card:hover img { transform: scale(1.05); }
+  .category-overlay {
+    position: absolute; inset: 0;
+    background: rgba(52, 46, 38, 0.1);
+    transition: background 0.3s;
+  }
+  .category-card:hover .category-overlay { background: rgba(52, 46, 38, 0.2); }
+  .category-info {
+    position: absolute; bottom: 0; left: 0; right: 0;
+    text-align: center; color: #fff;
+    padding-bottom: 48px;
+  }
+  .product-card-wrapper {
+    cursor: pointer;
+  }
+  .product-image-wrap {
+    aspect-ratio: 3/4; overflow: hidden;
+    background: var(--warm-beige);
+    position: relative;
+  }
+  .product-image-wrap img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    transition: transform 0.7s;
+  }
+  .product-card-wrapper:hover .product-image-wrap img { transform: scale(1.05); }
+  .quick-view {
+    position: absolute; bottom: 0; left: 0; right: 0;
+    background: rgba(52, 46, 38, 0.9); color: #fff;
+    text-align: center; padding: 12px;
+    font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase;
+    transform: translateY(100%);
+    transition: transform 0.3s;
+  }
+  .product-card-wrapper:hover .quick-view { transform: translateY(0); }
+  .favorite-btn {
+    position: absolute; top: 16px; right: 16px;
+    width: 36px; height: 36px;
+    background: rgba(255,255,255,0.8);
+    backdrop-filter: blur(4px);
+    border: none; display: flex; align-items: center; justify-content: center;
+    opacity: 0; transition: opacity 0.3s;
+  }
+  .product-card-wrapper:hover .favorite-btn { opacity: 1; }
+  .favorite-btn.active svg { fill: var(--rust); color: var(--rust); }
+  .bg-secondary-custom { background-color: var(--warm-beige) !important; }
+  .newsletter-section {
+    background-color: var(--dark-brown);
+    color: var(--cream);
+  }
+  .newsletter-input {
+    background: transparent;
+    border: 1px solid rgba(245, 240, 234, 0.3);
+    padding: 16px 24px;
+    color: var(--cream);
+    width: 100%;
+  }
+  .newsletter-input::placeholder { color: rgba(245, 240, 234, 0.5); }
+  .newsletter-input:focus { border-color: var(--cream); outline: none; }
+  .newsletter-btn {
+    background: var(--cream);
+    color: var(--dark-brown);
+    border: none;
+    padding: 16px 32px;
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+  .newsletter-btn:hover { opacity: 0.9; }
+  .carousel-indicators [data-bs-target] {
+    width: 32px; height: 2px;
+    border: none; border-radius: 0;
+    background: rgba(245, 240, 234, 0.4);
+  }
+  .carousel-indicators .active { background: var(--cream); }
+  .scroll-indicator { display: none; }
+  @media (min-width: 768px) { .scroll-indicator { display: flex; } }
+  .outline-btn {
+    border: 1px solid rgba(52, 46, 38, 0.3);
+    padding: 16px 32px;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    background: transparent;
+    transition: all 0.3s;
+  }
+  .outline-btn:hover {
+    background: var(--dark-brown);
+    color: #fff;
+    border-color: var(--dark-brown);
+  }
+  .feature-number {
+    font-size: 11px;
+    color: var(--muted-text);
+    font-family: monospace;
+    min-width: 24px;
+  }
+  .testimonial-quote {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: 1.5rem;
+    max-width: 700px;
+  }
+  @media (min-width: 768px) { .testimonial-quote { font-size: 1.75rem; } }
+  .testimonial-nav {
+    width: 40px; height: 40px;
+    border: 1px solid var(--light-border);
+    background: transparent;
+    display: flex; align-items: center; justify-content: center;
+    transition: border-color 0.3s;
+  }
+  .testimonial-nav:hover { border-color: var(--dark-brown); }
+  .dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    border: none;
+    background: var(--light-border);
+  }
+  .dot.active { background: var(--dark-brown); }
+  .carousel-indicators .dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    border: none;
+    background: var(--light-border);
+    text-indent: 0;
+    margin: 0 4px;
+  }
+  .carousel-indicators .dot.active { background: var(--dark-brown); }
+  .story-image {
+    aspect-ratio: 4/5; overflow: hidden;
+  }
+  .story-image img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+  }
+  .mt-12 { margin-top: 48px; }
+  @media (max-width: 991.98px) {
+    .section-title { font-size: 2rem; }
+    .hero-slide { height: 80vh; }
+  }
+  .page-container {
+    padding-top: 0 !important;
+  }
+</style>
+
+<!-- Hero Slider -->
+<section id="hero-carousel" class="carousel slide full-width" data-bs-ride="carousel" data-bs-interval="6000">
+  <div class="carousel-inner">
+    <div class="carousel-item active">
+      <div class="hero-slide" style="background-image: url('https://images.unsplash.com/photo-1576871337622-98d48d1cf531?q=80&w=2574&auto=format&fit=crop');">
+        <div class="hero-overlay"></div>
+        <div class="hero-content d-flex flex-column align-items-center justify-content-center h-100 text-center text-white px-4">
+          <p class="section-label text-white opacity-75 mb-4">Премиальный трикотаж ручной работы</p>
+          <h2 class="serif display-3 fw-normal mb-4">Коллекция Зима 2026</h2>
+          <a href="{% url 'main:popular_list' %}" class="hero-btn d-inline-flex align-items-center gap-3">
+            В магазин
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="arrow"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+          </a>
+        </div>
+      </div>
+    </div>
+    <div class="carousel-item">
+      <div class="hero-slide" style="background-image: url('https://images.unsplash.com/photo-1434389677669-e08b4cac3105?q=80&w=2610&auto=format&fit=crop');">
+        <div class="hero-overlay"></div>
+        <div class="hero-content d-flex flex-column align-items-center justify-content-center h-100 text-center text-white px-4">
+          <p class="section-label text-white opacity-75 mb-4">Ручная работа с любовью</p>
+          <h2 class="serif display-3 fw-normal mb-4">Вечное мастерство</h2>
+          <a href="{% url 'main:popular_list' %}" class="hero-btn d-inline-flex align-items-center gap-3">
+            Открыть
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="arrow"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="carousel-indicators" style="bottom: 40px;">
+    <button type="button" data-bs-target="#hero-carousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Слайд 1"></button>
+    <button type="button" data-bs-target="#hero-carousel" data-bs-slide-to="1" aria-label="Слайд 2"></button>
+  </div>
+
+  <div class="scroll-indicator flex-column align-items-center gap-2" style="position: absolute; bottom: 40px; right: 40px; z-index: 2;">
+    <span class="text-white text-uppercase" style="font-size: 10px; letter-spacing: 0.2em; transform: rotate(90deg) translateY(20px);">Листать</span>
+    <div style="width: 1px; height: 48px; background: rgba(255,255,255,0.4); margin-top: 24px;">
+      <div style="width: 100%; height: 50%; background: #fff; animation: pulse 2s infinite;"></div>
+    </div>
+  </div>
+</section>
+
+<!-- Categories -->
+<section class="py-5">
+  <div class="container">
+    <div class="text-center mb-5">
+      <p class="section-label mb-3">Откройте для себя</p>
+      <h2 class="section-title">Категории</h2>
+    </div>
+    <div class="row g-3">
+      <div class="col-md-4">
+        <a href="{% url 'main:popular_list' %}" class="category-card">
+          <img src="https://images.unsplash.com/photo-1620799140408-edc6dcb6d633?q=80&w=2572&auto=format&fit=crop" alt="Свитера">
+          <div class="category-overlay"></div>
+          <div class="category-info">
+            <p class="text-uppercase" style="font-size: 10px; letter-spacing: 0.25em; opacity: 0.8;">Ручная работа</p>
+            <h3 class="serif h3 fw-normal">Свитера</h3>
+          </div>
+        </a>
+      </div>
+      <div class="col-md-4">
+        <a href="{% url 'main:popular_list' %}" class="category-card">
+          <img src="https://images.unsplash.com/photo-1583846783214-7229a91b20ed?q=80&w=2535&auto=format&fit=crop" alt="Кардиганы">
+          <div class="category-overlay"></div>
+          <div class="category-info">
+            <p class="text-uppercase" style="font-size: 10px; letter-spacing: 0.25em; opacity: 0.8;">Премиум</p>
+            <h3 class="serif h3 fw-normal">Кардиганы</h3>
+          </div>
+        </a>
+      </div>
+      <div class="col-md-4">
+        <a href="{% url 'main:popular_list' %}" class="category-card">
+          <img src="https://images.unsplash.com/photo-1520903920243-00d872a2d1c9?q=80&w=2574&auto=format&fit=crop" alt="Аксессуары">
+          <div class="category-overlay"></div>
+          <div class="category-info">
+            <p class="text-uppercase" style="font-size: 10px; letter-spacing: 0.25em; opacity: 0.8;">Натуральное</p>
+            <h3 class="serif h3 fw-normal">Аксессуары</h3>
+          </div>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Story -->
+<section class="py-5 bg-secondary-custom full-width">
+  <div class="container">
+    <div class="row align-items-center g-5">
+      <div class="col-lg-6">
+        <div class="story-image">
+          <img src="https://images.unsplash.com/photo-1558171813-4c088753af8f?q=80&w=2574&auto=format&fit=crop" alt="Наша история">
+        </div>
+      </div>
+      <div class="col-lg-6">
+        <p class="section-label mb-3">Наша история</p>
+        <h2 class="section-title mb-4">Искусство, передаваемое через поколения</h2>
+        <p class="text-muted lh-lg mb-3">Каждое изделие начинается с лучших натуральных волокон — кашемира, мериноса и альпаки, полученных от проверенных мастеров. Каждый стежок несёт традицию качества, длящуюся десятилетиями.</p>
+        <p class="text-muted lh-lg mb-4">Мы верим в медленную моду: одежда, созданная чтобы длиться, сделанная с намерением и созданная чтобы её ценили долгие годы.</p>
+        <a href="#" class="outline-btn d-inline-flex align-items-center gap-3">
+          Узнать больше
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Featured Products -->
+<section class="py-5">
+  <div class="container">
+    <div class="d-flex flex-column flex-md-row align-items-start align-items-md-end justify-content-between gap-3 mb-5">
+      <div>
+        <p class="section-label mb-3">Избранное</p>
+        <h2 class="section-title">Популярные изделия</h2>
+      </div>
+      <a href="{% url 'main:popular_list' %}" class="outline-btn d-inline-flex align-items-center gap-3 flex-shrink-0">
+        Смотреть все
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+      </a>
+    </div>
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-4 g-4">
+      {% for product in products %}
+      <div class="col">
+        <a href="{% url 'main:product_detail' product.category.slug product.id %}" class="text-decoration-none text-reset product-card-wrapper d-block">
+          <div class="product-image-wrap">
+            {% with product.images.all|first as img %}
+            <img src="{% if img %}{{ img.image.url }}{% else %}{% static 'img/no_image.png' %}{% endif %}" alt="{{ product.name }}">
+            {% endwith %}
+            <div class="quick-view">Быстрый просмотр</div>
+          </div>
+          <div class="text-center mt-3">
+            <p class="text-uppercase text-muted mb-1" style="font-size: 10px; letter-spacing: 0.2em;">{{ product.category.name }}</p>
+            <h3 class="serif h5 fw-normal mb-1">{{ product.name }}</h3>
+            <p class="mb-0" style="font-size: 14px;">
+              {% if product.discount %}
+                <span class="text-muted text-decoration-line-through">{{ product.price }} €</span>
+                <span class="ms-1" style="color: var(--rust);">{{ product.get_discounted_price }} €</span>
+              {% else %}
+                {{ product.price }} €
+              {% endif %}
+            </p>
+          </div>
+        </a>
+      </div>
+      {% empty %}
+      <p class="text-muted">Товаров пока нет.</p>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- Craft -->
+<section class="py-5 bg-secondary-custom full-width">
+  <div class="container">
+    <div class="row align-items-center g-5">
+      <div class="col-lg-6 order-2 order-lg-1">
+        <p class="section-label mb-3">Мастерство</p>
+        <h2 class="section-title mb-5">Искусство создания тепла</h2>
+        <div class="d-flex flex-column gap-4">
+          <div class="d-flex gap-4">
+            <span class="feature-number">01</span>
+            <div>
+              <h3 class="serif h5 fw-normal mb-1">Натуральные материалы</h3>
+              <p class="text-muted" style="font-size: 14px;">Только кашемир, меринос и альпака высшего качества со всего мира.</p>
+            </div>
+          </div>
+          <div class="d-flex gap-4">
+            <span class="feature-number">02</span>
+            <div>
+              <h3 class="serif h5 fw-normal mb-1">Ручная работа</h3>
+              <p class="text-muted" style="font-size: 14px;">Каждое изделие создаётся вручную опытными мастерами.</p>
+            </div>
+          </div>
+          <div class="d-flex gap-4">
+            <span class="feature-number">03</span>
+            <div>
+              <h3 class="serif h5 fw-normal mb-1">Внимание к деталям</h3>
+              <p class="text-muted" style="font-size: 14px;">Идеальные швы и безупречная отделка каждой вещи.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-6 order-1 order-lg-2">
+        <div class="row g-3">
+          <div class="col-6">
+            <div class="story-image">
+              <img src="https://images.unsplash.com/photo-1544441893-675973e31985?q=80&w=2574&auto=format&fit=crop" alt="Процесс вязания">
+            </div>
+          </div>
+          <div class="col-6 mt-12">
+            <div class="story-image">
+              <img src="https://images.unsplash.com/photo-1558171813-4c088753af8f?q=80&w=2574&auto=format&fit=crop" alt="Детали изделия">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Testimonials -->
+<section class="py-5">
+  <div class="container" style="max-width: 800px;">
+    <div class="text-center mb-5">
+      <p class="section-label mb-3">Отзывы</p>
+      <h2 class="section-title">Что говорят клиенты</h2>
+    </div>
+    <div id="testimonial-carousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="8000">
+      <div class="carousel-inner text-center">
+        <div class="carousel-item active">
+          <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="text-muted mb-4" style="opacity: 0.5; transform: rotate(180deg);"><path d="M3 21c3 0 7-1 7-8V5c0-1.25-.756-2.017-2-2H4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2 1 0 1 0 1 1v1c0 1-1 2-2 2s-1 .008-1 1.031V21z"/><path d="M15 21c3 0 7-1 7-8V5c0-1.25-.757-2.017-2-2h-4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2h.75c0 2.25.25 4-2.75 4v3c0 1 0 1 1 1z"/></svg>
+          <div class="testimonial-quote mx-auto mb-4">
+            "Качество превосходит все ожидания. В каждом стежке чувствуется забота."
+          </div>
+          <div>
+            <p class="fw-medium mb-0">Анна М.</p>
+            <p class="text-muted" style="font-size: 11px;">Москва</p>
+          </div>
+        </div>
+        <div class="carousel-item">
+          <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="text-muted mb-4" style="opacity: 0.5; transform: rotate(180deg);"><path d="M3 21c3 0 7-1 7-8V5c0-1.25-.756-2.017-2-2H4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2 1 0 1 0 1 1v1c0 1-1 2-2 2s-1 .008-1 1.031V21z"/><path d="M15 21c3 0 7-1 7-8V5c0-1.25-.757-2.017-2-2h-4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2h.75c0 2.25.25 4-2.75 4v3c0 1 0 1 1 1z"/></svg>
+          <div class="testimonial-quote mx-auto mb-4">
+            "Уникальное качество ручной работы и внимание к каждой детали. Стоит каждого рубля."
+          </div>
+          <div>
+            <p class="fw-medium mb-0">Елена К.</p>
+            <p class="text-muted" style="font-size: 11px;">Санкт-Петербург</p>
+          </div>
+        </div>
+        <div class="carousel-item">
+          <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="text-muted mb-4" style="opacity: 0.5; transform: rotate(180deg);"><path d="M3 21c3 0 7-1 7-8V5c0-1.25-.756-2.017-2-2H4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2 1 0 1 0 1 1v1c0 1-1 2-2 2s-1 .008-1 1.031V21z"/><path d="M15 21c3 0 7-1 7-8V5c0-1.25-.757-2.017-2-2h-4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2h.75c0 2.25.25 4-2.75 4v3c0 1 0 1 1 1z"/></svg>
+          <div class="testimonial-quote mx-auto mb-4">
+            "Мой кардиган согревает даже в самые холодные дни. Он стал моей любимой вещью."
+          </div>
+          <div>
+            <p class="fw-medium mb-0">Мария Д.</p>
+            <p class="text-muted" style="font-size: 11px;">Казань</p>
+          </div>
+        </div>
+      </div>
+      <div class="d-flex justify-content-center gap-3 mt-4">
+        <button type="button" data-bs-target="#testimonial-carousel" data-bs-slide="prev" class="testimonial-nav">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+        </button>
+        <button type="button" data-bs-target="#testimonial-carousel" data-bs-slide="next" class="testimonial-nav">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+        </button>
+      </div>
+      <div class="carousel-indicators position-static d-flex justify-content-center gap-2 mt-3">
+        <button type="button" data-bs-target="#testimonial-carousel" data-bs-slide-to="0" class="dot active" aria-current="true" aria-label="Отзыв 1"></button>
+        <button type="button" data-bs-target="#testimonial-carousel" data-bs-slide-to="1" class="dot" aria-label="Отзыв 2"></button>
+        <button type="button" data-bs-target="#testimonial-carousel" data-bs-slide-to="2" class="dot" aria-label="Отзыв 3"></button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Newsletter -->
+<section class="py-5 newsletter-section full-width">
+  <div class="container" style="max-width: 600px;">
+    <div class="text-center">
+      <p class="text-uppercase mb-3" style="font-size: 11px; letter-spacing: 0.3em; opacity: 0.7;">Будьте в курсе</p>
+      <h2 class="serif h2 fw-normal mb-3">Подпишитесь на новости</h2>
+      <p class="mb-4" style="color: rgba(245, 240, 234, 0.7);">Узнавайте первыми о новых коллекциях и эксклюзивных предложениях.</p>
+      <form class="d-flex flex-column flex-sm-row gap-3" style="max-width: 500px; margin: 0 auto;">
+        <input type="email" class="newsletter-input flex-grow-1" placeholder="Ваш email" required>
+        <button type="submit" class="newsletter-btn d-inline-flex align-items-center justify-content-center gap-2">
+          Подписаться
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </button>
+      </form>
+    </div>
+  </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+let lastScroll = 0;
+const header = document.querySelector('.site-header');
+
+window.addEventListener('scroll', () => {
+    const currentScroll = window.pageYOffset;
+    if (currentScroll > lastScroll && currentScroll > 80) {
+        header.classList.add('header-hidden');
+    } else {
+        header.classList.remove('header-hidden');
+    }
+    lastScroll = currentScroll;
+});
+</script>
+{% endblock %}

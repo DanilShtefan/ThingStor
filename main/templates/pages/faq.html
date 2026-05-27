@@ -1,0 +1,129 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Частые вопросы | Вязаный Дом{% endblock %}
+
+{% block content %}
+<div class="text-center mb-5 pt-4">
+  <p class="section-label mb-3">Помощь</p>
+  <h1 class="section-title mb-3">Частые вопросы</h1>
+  <p class="text-muted">Ответы на популярные вопросы о наших изделиях и услугах</p>
+</div>
+
+<div class="faq-list" style="max-width: 720px; margin: 0 auto;">
+  <div class="faq-item">
+    <button class="faq-question" onclick="toggleFaq(this)">
+      <span class="serif fs-5">Сколько времени занимает изготовление изделия на заказ?</span>
+      <svg class="faq-chevron" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+    </button>
+    <div class="faq-answer">
+      <p>Срок изготовления зависит от сложности изделия и составляет от 2 до 4 недель. При оформлении заказа наш менеджер сообщит точные сроки.</p>
+    </div>
+  </div>
+
+  <div class="faq-item">
+    <button class="faq-question" onclick="toggleFaq(this)">
+      <span class="serif fs-5">Можно ли заказать изделие по индивидуальным меркам?</span>
+      <svg class="faq-chevron" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+    </button>
+    <div class="faq-answer">
+      <p>Да, мы предлагаем услугу индивидуального пошива. Вы можете выбрать любую модель из нашей коллекции и заказать её по своим меркам. Стоимость увеличится на 20%.</p>
+    </div>
+  </div>
+
+  <div class="faq-item">
+    <button class="faq-question" onclick="toggleFaq(this)">
+      <span class="serif fs-5">Какие материалы вы используете?</span>
+      <svg class="faq-chevron" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+    </button>
+    <div class="faq-answer">
+      <p>Мы работаем только с натуральными материалами высочайшего качества: мериносовая шерсть из Новой Зеландии, монгольский кашемир и перуанская альпака. Подробнее на странице <a href="{% url 'main:materials' %}" style="text-decoration: underline;">«Материалы»</a>.</p>
+    </div>
+  </div>
+
+  <div class="faq-item">
+    <button class="faq-question" onclick="toggleFaq(this)">
+      <span class="serif fs-5">Как правильно ухаживать за вязаными изделиями?</span>
+      <svg class="faq-chevron" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+    </button>
+    <div class="faq-answer">
+      <p>Рекомендуем ручную стирку в прохладной воде со специальными средствами для шерсти. Сушите изделия в разложенном виде. Полные рекомендации на странице <a href="{% url 'main:care' %}" style="text-decoration: underline;">«Уход за изделиями»</a>.</p>
+    </div>
+  </div>
+
+  <div class="faq-item">
+    <button class="faq-question" onclick="toggleFaq(this)">
+      <span class="serif fs-5">Есть ли у вас подарочные сертификаты?</span>
+      <svg class="faq-chevron" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+    </button>
+    <div class="faq-answer">
+      <p>Да, мы предлагаем подарочные сертификаты номиналом 5 000, 10 000, 25 000 и 50 000 рублей. Сертификат действителен в течение 1 года с момента покупки.</p>
+    </div>
+  </div>
+
+  <div class="faq-item">
+    <button class="faq-question" onclick="toggleFaq(this)">
+      <span class="serif fs-5">Можно ли примерить изделие перед покупкой?</span>
+      <svg class="faq-chevron" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+    </button>
+    <div class="faq-answer">
+      <p>Да, вы можете посетить наш шоурум в Москве по адресу ул. Большая Никитская, 12. Рекомендуем записаться на примерку заранее.</p>
+    </div>
+  </div>
+
+  <div class="faq-item">
+    <button class="faq-question" onclick="toggleFaq(this)">
+      <span class="serif fs-5">Как оформить корпоративный заказ?</span>
+      <svg class="faq-chevron" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+    </button>
+    <div class="faq-answer">
+      <p>Для корпоративных заказов от 10 изделий действуют специальные условия. Свяжитесь с нами по email corporate@vyazanydom.ru для получения предложения.</p>
+    </div>
+  </div>
+
+  <div class="faq-item">
+    <button class="faq-question" onclick="toggleFaq(this)">
+      <span class="serif fs-5">Вы доставляете за рубеж?</span>
+      <svg class="faq-chevron" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+    </button>
+    <div class="faq-answer">
+      <p>В настоящее время мы доставляем только по России. Международная доставка планируется в ближайшем будущем.</p>
+    </div>
+  </div>
+</div>
+
+<div class="text-center mt-5">
+  <p class="text-muted mb-4">Не нашли ответ на свой вопрос?</p>
+  <a href="{% url 'main:contacts' %}" class="outline-btn">Связаться с нами</a>
+</div>
+
+<script>
+function toggleFaq(btn) {
+  var parent = btn.parentElement;
+  var answer = parent.querySelector('.faq-answer');
+  var chevron = btn.querySelector('.faq-chevron');
+  var isOpen = parent.classList.contains('faq-open');
+
+  document.querySelectorAll('.faq-item.faq-open').forEach(function(item) {
+    if (item !== parent) {
+      item.classList.remove('faq-open');
+      item.querySelector('.faq-answer').style.maxHeight = '0';
+      item.querySelector('.faq-answer').style.paddingBottom = '0';
+      item.querySelector('.faq-chevron').classList.remove('rotated');
+    }
+  });
+
+  if (isOpen) {
+    parent.classList.remove('faq-open');
+    answer.style.maxHeight = '0';
+    answer.style.paddingBottom = '0';
+    chevron.classList.remove('rotated');
+  } else {
+    parent.classList.add('faq-open');
+    answer.style.maxHeight = answer.scrollHeight + 24 + 'px';
+    answer.style.paddingBottom = '24px';
+    chevron.classList.add('rotated');
+  }
+}
+</script>
+{% endblock %}
