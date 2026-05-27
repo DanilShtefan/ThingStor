@@ -35,3 +35,15 @@ class Product(models.Model):
 class ProductImage(models.Model):
     product = models.ForeignKey(Product, related_name='images', on_delete=models.CASCADE)
     image = models.ImageField(upload_to='products/%Y/%m/%d')
+
+
+from django.core.cache import cache
+from django.db.models.signals import post_save, post_delete
+
+def invalidate_product_cache(sender, **kwargs):
+    cache.delete_pattern('products:*')
+
+post_save.connect(invalidate_product_cache, sender=Product)
+post_delete.connect(invalidate_product_cache, sender=Product)
+post_save.connect(invalidate_product_cache, sender=ProductImage)
+post_delete.connect(invalidate_product_cache, sender=ProductImage)

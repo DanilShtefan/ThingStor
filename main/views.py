@@ -1,5 +1,6 @@
 from django.shortcuts import render, get_object_or_404
 from django.core.paginator import Paginator
+from django.core.cache import cache
 from django.template.loader import render_to_string
 from django.http import JsonResponse
 from .models import Product, Category
@@ -8,35 +9,48 @@ from cart.forms import CartAddProductForm
 
 def popular_list(request, category_slug=None):
     category = None
-    products = Product.objects.filter(available=True).select_related('category').prefetch_related('images')
-
-    if category_slug:
-        category = get_object_or_404(Category, slug=category_slug)
-        products = products.filter(category=category)
-
-    paginator = Paginator(products, 8)
     page_number = request.GET.get('page', 1)
-    page_obj = paginator.get_page(page_number)
+    cache_key = f'products:{category_slug or "all"}:{page_number}'
+    cached = cache.get(cache_key)
+
+    if cached:
+        page_products, total, has_next = cached
+    else:
+        products = Product.objects.filter(available=True).select_related('category').prefetch_related('images')
+
+        if category_slug:
+            category = get_object_or_404(Category, slug=category_slug)
+            products = products.filter(category=category)
+
+        paginator = Paginator(products, 8)
+        page_obj = paginator.get_page(page_number)
+        page_products = list(page_obj)
+        total = paginator.count
+        has_next = page_obj.has_next()
+        cache.set(cache_key, (page_products, total, has_next), 300)
 
     if request.headers.get('x-requested-with') == 'XMLHttpRequest':
         html = render_to_string('product/_products.html', {
-            'products': page_obj,
-        })
+            'products': page_products,
+        }, request=request)
         return JsonResponse({
             'html': html,
-            'has_next': page_obj.has_next(),
+            'has_next': has_next,
         })
 
     return render(request, 'product/list.html', {
-        'products': page_obj,
+        'products': page_products,
         'category': category,
         'categories': Category.objects.all(),
-        'page_obj': page_obj,
-        'paginator': paginator,
+        'has_next': has_next,
     })
 
 def homepage(request):
-    products = Product.objects.filter(available=True).select_related('category').prefetch_related('images').order_by('-created')[:4]
+    cache_key = 'homepage_products'
+    products = cache.get(cache_key)
+    if products is None:
+        products = list(Product.objects.filter(available=True).select_related('category').prefetch_related('images').order_by('-created')[:4])
+        cache.set(cache_key, products, 300)
     return render(request, 'main/index.html', {
         'products': products,
     })
