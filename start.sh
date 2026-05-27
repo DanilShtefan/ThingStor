@@ -1,4 +1,5 @@
 #!/bin/bash
+mkdir -p media
 python manage.py migrate --noinput
 DJANGO_SUPERUSER_PASSWORD=$SUPERUSER_PASSWORD python manage.py createsuperuser \
   --username $SUPERUSER_USERNAME --email $SUPERUSER_EMAIL --noinput 2>/dev/null || true
