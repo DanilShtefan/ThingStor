@@ -1,0 +1,39 @@
+services:
+  - type: web
+    name: thingstor
+    env: python
+    buildCommand: pip install -r requirements.txt && python manage.py collectstatic --noinput
+    startCommand: ./start.sh
+    envVars:
+      - key: RENDER
+        value: "true"
+      - key: SECRET_KEY
+        generateValue: true
+      - key: ALLOWED_HOSTS
+        value: ".onrender.com,localhost"
+      - key: DATABASE_NAME
+        fromDatabase:
+          name: thingstor-db
+          property: database
+      - key: DATABASE_USER
+        fromDatabase:
+          name: thingstor-db
+          property: user
+      - key: DATABASE_PASSWORD
+        fromDatabase:
+          name: thingstor-db
+          property: password
+      - key: DATABASE_HOST
+        fromDatabase:
+          name: thingstor-db
+          property: host
+      - key: DATABASE_PORT
+        fromDatabase:
+          name: thingstor-db
+          property: port
+
+databases:
+  - name: thingstor-db
+    plan: free
+    databaseName: thingstor
+    user: thingstor
