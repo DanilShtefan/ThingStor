@@ -21,6 +21,7 @@
             </button>
 
             <nav class="desktop-nav">
+                <a href="{% url 'main:new_arrivals' %}">Новинки</a>
                 <a href="{% url 'main:popular_list' %}#collection">Коллекция</a>
                 <a href="/about/">О нас</a>
                 <a href="{% url 'main:contacts' %}">Контакты</a>
@@ -59,6 +60,7 @@
 
         <div class="mobile-menu" id="mobileMenu">
             <nav>
+                <a href="{% url 'main:new_arrivals' %}">Новинки</a>
                 <a href="{% url 'main:popular_list' %}#collection">Коллекция</a>
                 <a href="/about/">О нас</a>
                 <a href="{% url 'main:contacts' %}">Контакты</a>

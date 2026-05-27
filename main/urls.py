@@ -15,4 +15,5 @@ urlpatterns = [
     path('category/', views.popular_list, name='popular_list'),
     path('category/<slug:category_slug>/', views.popular_list, name='popular_list_by_category'),
     path('category/<slug:category_slug>/<int:id>/', views.product_detail, name='product_detail'),
+    path('new-arrivals/', views.new_arrivals, name='new_arrivals'),
 ]

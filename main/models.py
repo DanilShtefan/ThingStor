@@ -42,6 +42,7 @@ from django.db.models.signals import post_save, post_delete
 
 def invalidate_product_cache(sender, **kwargs):
     cache.delete_pattern('products:*')
+    cache.delete_pattern('newarrivals:*')
 
 post_save.connect(invalidate_product_cache, sender=Product)
 post_delete.connect(invalidate_product_cache, sender=Product)
