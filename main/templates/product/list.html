@@ -2,11 +2,12 @@
 {% load static %}
 
 {% block title %}
-    {% if category %}{{ category.name }}{% else %}Товары{% endif %}
+    {% if is_search %}Поиск: {{ search_query }}{% elif category %}{{ category.name }}{% else %}Товары{% endif %}
 {% endblock %}
 
 {% block content %}
 <div class="row">
+    {% if not is_search %}
     <aside class="col-md-3">
         <p class="section-label mb-3">Категории</p>
         <ul style="list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 6px;">
@@ -29,9 +30,10 @@
             {% endfor %}
         </ul>
     </aside>
+    {% endif %}
 
-    <main class="col-md-9">
-        <h1 class="section-title mb-4">{% if is_new_arrivals %}Новинки{% elif category %}{{ category.name }}{% else %}Товары{% endif %}</h1>
+    <main class="{% if is_search %}col-md-12{% else %}col-md-9{% endif %}">
+        <h1 class="section-title mb-4">{% if is_search %}Результаты поиска: «{{ search_query }}»{% elif is_new_arrivals %}Новинки{% elif category %}{{ category.name }}{% else %}Товары{% endif %}</h1>
 
         <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-4 g-3" id="product-grid">
             {% include "product/_products.html" %}

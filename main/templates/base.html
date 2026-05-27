@@ -33,7 +33,7 @@
             </a>
 
             <div class="header-actions">
-                <button aria-label="Поиск" class="icon-btn">
+                <button id="searchToggle" aria-label="Поиск" class="icon-btn">
                     <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
                 </button>
                 <a href="{% url 'favorites:favorites_detail' %}" class="icon-btn" aria-label="Избранное">
@@ -58,6 +58,19 @@
             </div>
         </div>
 
+        <div class="search-overlay" id="searchOverlay">
+            <form class="search-form" action="{% url 'main:product_search' %}" method="GET">
+                <input class="search-input" id="searchInput" type="text" name="q" placeholder="Поиск товаров..." autocomplete="off" required>
+                <button class="search-submit" type="submit">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                </button>
+                <button class="search-close" type="button" id="searchClose">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                </button>
+            </form>
+            <div class="search-results" id="searchResults"></div>
+        </div>
+
         <div class="mobile-menu" id="mobileMenu">
             <nav>
                 <a href="{% url 'main:new_arrivals' %}">Новинки</a>
@@ -68,14 +81,14 @@
         </div>
     </header>
 
-    <main class="main-content flex-grow-1">
+    <main class="main-content flex-grow-1" id="mainContent">
         <div class="container page-container">
             {% block content %}
             {% endblock content %}
         </div>
     </main>
 
-    <footer class="site-footer">
+    <footer class="site-footer" id="siteFooter">
         <div class="footer-inner">
             <div class="footer-grid">
                 <div class="footer-brand">
@@ -132,6 +145,113 @@
         document.getElementById('mobileMenuBtn').addEventListener('click', function() {
             document.getElementById('mobileMenu').classList.toggle('open');
         });
+
+        var searchToggle = document.getElementById('searchToggle');
+        var searchOverlay = document.getElementById('searchOverlay');
+        var searchClose = document.getElementById('searchClose');
+        var searchInput = document.getElementById('searchInput');
+        var searchResults = document.getElementById('searchResults');
+        var mainContent = document.getElementById('mainContent');
+        var siteFooter = document.getElementById('siteFooter');
+
+        function openSearch() {
+            searchOverlay.classList.add('open');
+            if (mainContent) mainContent.classList.add('search-dimmed');
+            if (siteFooter) siteFooter.classList.add('search-dimmed');
+            document.body.style.overflow = 'hidden';
+            var formRect = document.querySelector('.search-form').getBoundingClientRect();
+            var available = window.innerHeight - formRect.bottom - 16;
+            searchResults.style.maxHeight = Math.max(100, available) + 'px';
+            searchOverlay.style.maxHeight = (formRect.bottom - searchOverlay.getBoundingClientRect().top + Math.max(100, available)) + 'px';
+            setTimeout(function() { searchInput.focus(); }, 100);
+        }
+
+        function closeSearch() {
+            searchOverlay.classList.remove('open');
+            searchOverlay.style.maxHeight = '';
+            searchResults.classList.remove('visible');
+            searchResults.style.maxHeight = '';
+            searchInput.value = '';
+            if (mainContent) mainContent.classList.remove('search-dimmed');
+            if (siteFooter) siteFooter.classList.remove('search-dimmed');
+            document.body.style.overflow = '';
+        }
+
+        if (searchToggle && searchOverlay) {
+            searchToggle.addEventListener('click', function() {
+                if (searchOverlay.classList.contains('open')) {
+                    closeSearch();
+                } else {
+                    openSearch();
+                }
+            });
+            if (searchClose) {
+                searchClose.addEventListener('click', closeSearch);
+            }
+            document.addEventListener('click', function(e) {
+                if (!searchOverlay.contains(e.target) && !searchToggle.contains(e.target) && searchOverlay.classList.contains('open')) {
+                    closeSearch();
+                }
+            });
+            if (mainContent) {
+                mainContent.addEventListener('click', function(e) {
+                    if (searchOverlay.classList.contains('open')) {
+                        closeSearch();
+                    }
+                });
+            }
+        }
+
+
+
+        if (searchInput && searchResults) {
+            var debounceTimer;
+            var suggestionsUrl = '{% url "main:search_suggestions" %}';
+
+            searchInput.addEventListener('input', function() {
+                clearTimeout(debounceTimer);
+                var query = this.value.trim();
+                if (query.length < 1) {
+                    searchResults.classList.remove('visible');
+                    return;
+                }
+                debounceTimer = setTimeout(function() {
+                    fetch(suggestionsUrl + '?q=' + encodeURIComponent(query))
+                        .then(function(r) { return r.json(); })
+                        .then(function(data) {
+                            var results = data.results;
+                            if (results.length === 0) {
+                                searchResults.classList.remove('visible');
+                                return;
+                            }
+                            var html = '';
+                            for (var i = 0; i < results.length; i++) {
+                                var p = results[i];
+                                var imgHtml = p.image ? '<img src="' + p.image + '" alt="' + p.name + '">' : '<div class="search-result-img placeholder"></div>';
+                                var priceHtml = p.discount && parseFloat(p.discount) > 0
+                                    ? '<span class="search-old-price">' + p.price + ' €</span> <span>' + (parseFloat(p.price) - parseFloat(p.price) * parseFloat(p.discount) / 100).toFixed(2) + ' €</span>'
+                                    : '<span>' + p.price + ' €</span>';
+                                html += '<a href="/category/' + p.category_slug + '/' + p.id + '/" class="search-result-item">'
+                                    + '<div class="search-result-img-wrap">' + imgHtml + '</div>'
+                                    + '<div class="search-result-info">'
+                                    + '<span class="search-result-name">' + p.name + '</span>'
+                                    + '<span class="search-result-category">' + p.category + '</span>'
+                                    + '<span class="search-result-price">' + priceHtml + '</span>'
+                                    + '</div>'
+                                    + '</a>';
+                            }
+                            searchResults.innerHTML = html;
+                            searchResults.classList.add('visible');
+                        });
+                }, 300);
+            });
+
+            searchInput.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') {
+                    searchResults.classList.remove('visible');
+                }
+            });
+        }
     </script>
     {% block extra_js %}{% endblock %}
 </body>

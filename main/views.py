@@ -1,3 +1,4 @@
+import json
 from datetime import timedelta
 from django.shortcuts import render, get_object_or_404
 from django.core.paginator import Paginator
@@ -6,6 +7,7 @@ from django.template.loader import render_to_string
 from django.http import JsonResponse
 from django.utils import timezone
 from django.views.decorators.cache import cache_page
+from django.views.decorators.http import require_GET
 from .models import Product, Category
 from cart.forms import CartAddProductForm
 
@@ -103,30 +105,83 @@ def new_arrivals(request):
         'is_new_arrivals': True,
     })
 
-@cache_page(86400)
+def product_search(request):
+    query = request.GET.get('q', '').strip()
+    page_number = request.GET.get('page', 1)
+
+    if query:
+        products = Product.objects.filter(
+            available=True,
+            name__icontains=query
+        ).select_related('category').prefetch_related('images')
+    else:
+        products = Product.objects.none()
+
+    paginator = Paginator(products, 8)
+    page_obj = paginator.get_page(page_number)
+    page_products = list(page_obj)
+    has_next = page_obj.has_next()
+
+    if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+        html = render_to_string('product/_products.html', {
+            'products': page_products,
+        }, request=request)
+        return JsonResponse({
+            'html': html,
+            'has_next': has_next,
+        })
+
+    return render(request, 'product/list.html', {
+        'products': page_products,
+        'categories': Category.objects.all(),
+        'has_next': has_next,
+        'is_search': True,
+        'search_query': query,
+    })
+
+@require_GET
+def search_suggestions(request):
+    query = request.GET.get('q', '').strip()
+    if len(query) < 1:
+        return JsonResponse({'results': []})
+
+    products = Product.objects.filter(
+        available=True,
+        name__icontains=query
+    ).select_related('category')[:6]
+
+    results = []
+    for p in products:
+        img = p.images.first()
+        results.append({
+            'id': p.id,
+            'name': p.name,
+            'price': str(p.price),
+            'discount': str(p.discount),
+            'category': p.category.name,
+            'category_slug': p.category.slug,
+            'image': img.image.url if img else None,
+        })
+
+    return JsonResponse({'results': results})
+
 def about(request):
     return render(request, 'pages/about.html')
 
-@cache_page(86400)
 def materials(request):
     return render(request, 'pages/materials.html')
 
-@cache_page(86400)
 def contacts(request):
     return render(request, 'pages/contacts.html')
 
-@cache_page(86400)
 def delivery(request):
     return render(request, 'pages/delivery.html')
 
-@cache_page(86400)
 def care(request):
     return render(request, 'pages/care.html')
 
-@cache_page(86400)
 def sizes(request):
     return render(request, 'pages/sizes.html')
 
-@cache_page(86400)
 def faq(request):
     return render(request, 'pages/faq.html')

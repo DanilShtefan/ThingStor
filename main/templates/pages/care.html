@@ -1,9 +1,11 @@
 {% extends "base.html" %}
 {% load static %}
+{% load cache %}
 
 {% block title %}Уход за изделиями | Вязаный Дом{% endblock %}
 
 {% block content %}
+{% cache 86400 pages_care %}
 <div class="text-center mb-5 pt-4">
   <p class="section-label mb-3">Рекомендации</p>
   <h1 class="section-title mb-3">Уход за изделиями</h1>
@@ -71,4 +73,5 @@
   <p class="text-muted mb-4">Если у вас есть вопросы по уходу за изделиями, свяжитесь с нами.</p>
   <a href="{% url 'main:contacts' %}" class="outline-btn">Связаться с нами</a>
 </div>
+{% endcache %}
 {% endblock %}

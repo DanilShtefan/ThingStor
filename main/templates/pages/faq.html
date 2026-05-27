@@ -1,9 +1,11 @@
 {% extends "base.html" %}
 {% load static %}
+{% load cache %}
 
 {% block title %}Частые вопросы | Вязаный Дом{% endblock %}
 
 {% block content %}
+{% cache 86400 pages_faq %}
 <div class="text-center mb-5 pt-4">
   <p class="section-label mb-3">Помощь</p>
   <h1 class="section-title mb-3">Частые вопросы</h1>
@@ -126,4 +128,5 @@ function toggleFaq(btn) {
   }
 }
 </script>
+{% endcache %}
 {% endblock %}

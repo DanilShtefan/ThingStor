@@ -1,9 +1,11 @@
 {% extends "base.html" %}
 {% load static %}
+{% load cache %}
 
 {% block title %}Доставка и возврат | Вязаный Дом{% endblock %}
 
 {% block content %}
+{% cache 86400 pages_delivery %}
 <div class="text-center mb-5 pt-4">
   <p class="section-label mb-3">Информация</p>
   <h1 class="section-title">Доставка и возврат</h1>
@@ -81,4 +83,5 @@
     <p>Для оформления возврата свяжитесь с нами по email info@vyazanydom.ru или по телефону +7 (495) 123-45-67.</p>
   </div>
 </section>
+{% endcache %}
 {% endblock %}

@@ -1,9 +1,11 @@
 {% extends "base.html" %}
 {% load static %}
+{% load cache %}
 
 {% block title %}Контакты | Вязаный Дом{% endblock %}
 
 {% block content %}
+{% cache 86400 pages_contacts %}
 <div class="text-center mb-5 pt-4">
   <p class="section-label mb-3">Связаться с нами</p>
   <h1 class="section-title">Контакты</h1>
@@ -73,4 +75,5 @@
     </form>
   </div>
 </div>
+{% endcache %}
 {% endblock %}
