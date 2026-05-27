@@ -149,8 +149,7 @@ INTERNAL_IPS = ['127.0.0.1']
 if config('RENDER', default='false').lower() == 'true':
     CACHES = {
         'default': {
-            'BACKEND': 'django.core.cache.backends.db.DatabaseCache',
-            'LOCATION': 'render_cache',
+            'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
         }
     }
     SESSION_ENGINE = 'django.contrib.sessions.backends.db'
