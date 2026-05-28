@@ -16,7 +16,11 @@ urlpatterns = [
     path('', include('main.urls', namespace='main')),
 ]
 
-if not config('SUPABASE_S3_BUCKET', default=None):
+is_supabase_storage = (
+    config('RENDER', default='false').lower() == 'true' and
+    config('SUPABASE_S3_BUCKET', default=None)
+)
+if not is_supabase_storage:
     if settings.DEBUG or config('RENDER', default='false').lower() == 'true':
         urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 if settings.DEBUG:

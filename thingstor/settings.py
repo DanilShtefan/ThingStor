@@ -136,7 +136,7 @@ MEDIA_ROOT = BASE_DIR / 'media'
 
 SUPABASE_S3_BUCKET = config('SUPABASE_S3_BUCKET', default=None)
 SUPABASE_PROJECT_ID = config('SUPABASE_PROJECT_ID', default=None)
-if SUPABASE_S3_BUCKET:
+if config('RENDER', default='false').lower() == 'true' and SUPABASE_S3_BUCKET:
     MEDIA_URL = f'https://{SUPABASE_PROJECT_ID}.supabase.co/storage/v1/object/public/{SUPABASE_S3_BUCKET}/'
     DEFAULT_FILE_STORAGE = 'thingstor.storage_backends.SupabaseStorage'
     AWS_ACCESS_KEY_ID = config('SUPABASE_S3_ACCESS_KEY')
