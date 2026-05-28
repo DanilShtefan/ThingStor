@@ -138,7 +138,6 @@ SUPABASE_S3_BUCKET = config('SUPABASE_S3_BUCKET', default=None)
 SUPABASE_PROJECT_ID = config('SUPABASE_PROJECT_ID', default=None)
 if config('RENDER', default='false').lower() == 'true' and SUPABASE_S3_BUCKET:
     MEDIA_URL = f'https://{SUPABASE_PROJECT_ID}.supabase.co/storage/v1/object/public/{SUPABASE_S3_BUCKET}/'
-    DEFAULT_FILE_STORAGE = 'thingstor.storage_backends.SupabaseStorage'
     AWS_ACCESS_KEY_ID = config('SUPABASE_S3_ACCESS_KEY')
     AWS_SECRET_ACCESS_KEY = config('SUPABASE_S3_SECRET_KEY')
     AWS_STORAGE_BUCKET_NAME = SUPABASE_S3_BUCKET
@@ -147,6 +146,10 @@ if config('RENDER', default='false').lower() == 'true' and SUPABASE_S3_BUCKET:
     AWS_S3_ADDRESSING_STYLE = 'path'
     AWS_S3_FILE_OVERWRITE = False
     AWS_QUERYSTRING_AUTH = False
+    STORAGES = {
+        'default': {'BACKEND': 'thingstor.storage_backends.SupabaseStorage'},
+        'staticfiles': {'BACKEND': 'whitenoise.storage.CompressedManifestStaticFilesStorage'},
+    }
 
 SESSION_COOKIE_AGE = 604800
 SESSION_SAVE_EVERY_REQUEST = True
