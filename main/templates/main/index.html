@@ -223,7 +223,7 @@
 <section id="hero-carousel" class="carousel slide full-width" data-bs-ride="carousel" data-bs-interval="6000">
   <div class="carousel-inner">
     <div class="carousel-item active">
-      <div class="hero-slide" style="background-image: url('https://images.unsplash.com/photo-1576871337622-98d48d1cf531?q=80&w=2574&auto=format&fit=crop');">
+      <div class="hero-slide" style="background-image: url('{% static 'img/главная.jpg' %}');">
         <div class="hero-overlay"></div>
         <div class="hero-content d-flex flex-column align-items-center justify-content-center h-100 text-center text-white px-4">
           <p class="section-label text-white opacity-75 mb-4">Премиальный трикотаж ручной работы</p>
@@ -236,7 +236,7 @@
       </div>
     </div>
     <div class="carousel-item">
-      <div class="hero-slide" style="background-image: url('https://images.unsplash.com/photo-1434389677669-e08b4cac3105?q=80&w=2610&auto=format&fit=crop');">
+      <div class="hero-slide" style="background-image: url('{% static 'img/главная страница 2.avif' %}');">
         <div class="hero-overlay"></div>
         <div class="hero-content d-flex flex-column align-items-center justify-content-center h-100 text-center text-white px-4">
           <p class="section-label text-white opacity-75 mb-4">Ручная работа с любовью</p>
@@ -273,7 +273,7 @@
     <div class="row g-3">
       <div class="col-md-4">
         <a href="{% url 'main:popular_list' %}" class="category-card">
-          <img src="https://images.unsplash.com/photo-1620799140408-edc6dcb6d633?q=80&w=2572&auto=format&fit=crop" alt="Свитера">
+          <img src="{% static 'img/свитер.jpg' %}" alt="Свитера">
           <div class="category-overlay"></div>
           <div class="category-info">
             <p class="text-uppercase" style="font-size: 10px; letter-spacing: 0.25em; opacity: 0.8;">Ручная работа</p>
@@ -283,7 +283,7 @@
       </div>
       <div class="col-md-4">
         <a href="{% url 'main:popular_list' %}" class="category-card">
-          <img src="https://images.unsplash.com/photo-1583846783214-7229a91b20ed?q=80&w=2535&auto=format&fit=crop" alt="Кардиганы">
+          <img src="{% static 'img/кардиган.jpg' %}" alt="Кардиганы">
           <div class="category-overlay"></div>
           <div class="category-info">
             <p class="text-uppercase" style="font-size: 10px; letter-spacing: 0.25em; opacity: 0.8;">Премиум</p>
@@ -293,11 +293,11 @@
       </div>
       <div class="col-md-4">
         <a href="{% url 'main:popular_list' %}" class="category-card">
-          <img src="https://images.unsplash.com/photo-1520903920243-00d872a2d1c9?q=80&w=2574&auto=format&fit=crop" alt="Аксессуары">
+          <img src="{% static 'img/шапка.jpg' %}" alt="Шапки">
           <div class="category-overlay"></div>
           <div class="category-info">
             <p class="text-uppercase" style="font-size: 10px; letter-spacing: 0.25em; opacity: 0.8;">Натуральное</p>
-            <h3 class="serif h3 fw-normal">Аксессуары</h3>
+            <h3 class="serif h3 fw-normal">Шапки</h3>
           </div>
         </a>
       </div>
@@ -311,7 +311,7 @@
     <div class="row align-items-center g-5">
       <div class="col-lg-6">
         <div class="story-image">
-          <img src="https://images.unsplash.com/photo-1558171813-4c088753af8f?q=80&w=2574&auto=format&fit=crop" alt="Наша история">
+          <img src="{% static 'img/триводном.jpg' %}" alt="Наша история">
         </div>
       </div>
       <div class="col-lg-6">
@@ -407,12 +407,12 @@
         <div class="row g-3">
           <div class="col-6">
             <div class="story-image">
-              <img src="https://images.unsplash.com/photo-1544441893-675973e31985?q=80&w=2574&auto=format&fit=crop" alt="Процесс вязания">
+              <img src="{% static 'img/тепло-1.jpg' %}" alt="Процесс вязания">
             </div>
           </div>
           <div class="col-6 mt-12">
             <div class="story-image">
-              <img src="https://images.unsplash.com/photo-1558171813-4c088753af8f?q=80&w=2574&auto=format&fit=crop" alt="Детали изделия">
+              <img src="{% static 'img/тепло-2.jpg' %}" alt="Детали изделия">
             </div>
           </div>
         </div>
