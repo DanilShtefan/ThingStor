@@ -44,7 +44,7 @@
                         {% endif %}
                     {% endwith %}
                 </a>
-                <a href="{% if user.is_authenticated %}{% url 'users:profile' %}{% else %}{% url 'users:login' %}{% endif %}" aria-label="Аккаунт" class="icon-btn desktop-icon">
+                <a href="{% if user.is_authenticated %}{% url 'users:profile' %}{% else %}{% url 'users:login' %}{% endif %}" aria-label="Аккаунт" class="icon-btn">
                     <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
                 </a>
                 <a href="{% url 'cart:cart_detail' %}" class="icon-btn cart-btn" aria-label="Корзина">
@@ -101,11 +101,10 @@
                 <div class="footer-col">
                     <h4 class="footer-col-title">Магазин</h4>
                     <ul>
-                        <li><a href="{% url 'main:popular_list' %}">Новинки</a></li>
-                        <li><a href="{% url 'main:popular_list' %}">Свитера</a></li>
-                        <li><a href="{% url 'main:popular_list' %}">Кардиганы</a></li>
-                        <li><a href="{% url 'main:popular_list' %}">Аксессуары</a></li>
-                        <li><a href="#">Подарочные сертификаты</a></li>
+                        <li><a href="{% url 'main:new_arrivals' %}">Новинки</a></li>
+                        <li><a href="{% url 'main:popular_list_by_category' category_slug='sweater' %}">Свитера</a></li>
+                        <li><a href="{% url 'main:popular_list_by_category' category_slug='cardigan' %}">Кардиганы</a></li>
+                        <li><a href="{% url 'main:popular_list_by_category' category_slug='knitted_hat' %}">Шапки</a></li>
                     </ul>
                 </div>
                 <div class="footer-col">
