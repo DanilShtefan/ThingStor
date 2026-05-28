@@ -37,6 +37,8 @@ services:
         value: "eu-central-1"
       - key: SUPABASE_S3_BUCKET
         value: "thingstor-media"
+      - key: SUPABASE_PROJECT_ID
+        value: "wmelfcdjgixivhurvwwo"
       # Также добавь вручную в Render Dashboard:
       # SUPABASE_S3_ACCESS_KEY и SUPABASE_S3_SECRET_KEY
 
