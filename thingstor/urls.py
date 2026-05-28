@@ -16,7 +16,8 @@ urlpatterns = [
     path('', include('main.urls', namespace='main')),
 ]
 
-if settings.DEBUG or config('RENDER', default='false').lower() == 'true':
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+if not config('SUPABASE_S3_BUCKET', default=None):
+    if settings.DEBUG or config('RENDER', default='false').lower() == 'true':
+        urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 if settings.DEBUG:
     urlpatterns += [path('__debug__/', include('debug_toolbar.urls'))]
