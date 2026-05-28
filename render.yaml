@@ -31,6 +31,14 @@ services:
         fromDatabase:
           name: thingstor-db
           property: port
+      - key: SUPABASE_S3_ENDPOINT
+        value: "https://wmelfcdjgixivhurvwwo.storage.supabase.co/storage/v1/s3"
+      - key: SUPABASE_S3_REGION
+        value: "eu-central-1"
+      - key: SUPABASE_S3_BUCKET
+        value: "thingstor-media"
+      # Также добавь вручную в Render Dashboard:
+      # SUPABASE_S3_ACCESS_KEY и SUPABASE_S3_SECRET_KEY
 
 databases:
   - name: thingstor-db
